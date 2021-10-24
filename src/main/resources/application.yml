@@ -4,3 +4,7 @@ spring:
     url: jdbc:mysql://localhost:3306/Dev_Local
     username: root
     password: 1016
+  jpa:
+    properties:
+      hibernate:
+        default_schema: dev_local
