@@ -1,4 +1,4 @@
-package com.csci4050.movie.api;
+package com.csci4050.movie.api.customer;
 
 import com.csci4050.movie.api.model.Customer;
 import org.modelmapper.ModelMapper;

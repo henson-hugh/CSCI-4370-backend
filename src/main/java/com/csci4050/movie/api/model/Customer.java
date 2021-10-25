@@ -17,8 +17,8 @@ import java.time.LocalDate;
 public class Customer {
 
     @Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
-    private Long id;
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    private int cid;
 
     @Column(name = "fname")
     private String firstName;
@@ -35,6 +35,4 @@ public class Customer {
     @Column(name = "address")
     private String address;
 
-    @Column(name = "creation_date")
-    private LocalDate creationDate;
 }

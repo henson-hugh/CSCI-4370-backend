@@ -1,9 +1,8 @@
-package com.csci4050.movie.api;
+package com.csci4050.movie.api.customer;
 
+import com.csci4050.movie.api.customer.CustomerRepository;
 import com.csci4050.movie.api.model.Customer;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,11 +18,15 @@ public class CustomerService {
         return customerRepository.findById(id);
     }
 
+    public Optional<Customer> getCustomerByEmail(String email) {
+        return customerRepository.findDistinctByEmail(email);
+    }
+
     public List<Customer> getAllCustomers() {
         return (List<Customer>) customerRepository.findAll();
     };
 
-    public Customer createCustomer(Customer customer) {
+    public Customer saveCustomer(Customer customer) {
         return customerRepository.save(customer);
     }
 
@@ -37,6 +40,6 @@ public class CustomerService {
     }
 
     public void deleteCustomer(Long id) {
-        customerRepository.delete(customerRepository.findById(id).get());
+        customerRepository.deleteById(id);
     }
 }
