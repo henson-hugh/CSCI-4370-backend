@@ -18,8 +18,12 @@ public class CustomerService {
         return customerRepository.findById(id);
     }
 
-    public Optional<Customer> getCustomerByEmail(String email) {
-        return customerRepository.findDistinctByEmail(email);
+    public Customer getCustomerByEmail(String email) {
+        if (customerRepository.findByEmail(email) == null) {
+            return new Customer();
+        } else {
+            return customerRepository.findByEmail(email);
+        }
     }
 
     public List<Customer> getAllCustomers() {

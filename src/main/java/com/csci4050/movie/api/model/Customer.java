@@ -32,7 +32,7 @@ public class Customer {
     @Column(name = "password")
     private String password;
 
-    @Column(name = "address")
+    @Column(name = "address", unique = true)
     private String address;
 
 }

@@ -20,15 +20,15 @@ public class RegistrationController {
     @PostMapping(value = "/register")
     public ResponseEntity<Customer> registerCustomer(@RequestBody Customer customer) throws Exception {
         String email = customer.getEmail();
-            Optional<Customer> resultCustomer = customerService.getCustomerByEmail(email);
-            if (resultCustomer != null) {
-//                System.out.println("****************User with: " + email + " already exists.**************");
-//                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-//                        .body(customer);
-                //throw new Exception("User with: " + email + " already exists.");
+            Customer resultCustomer = customerService.getCustomerByEmail(email);
+            if (resultCustomer == new Customer()) {
+                return ResponseEntity.status(HttpStatus.ACCEPTED)
+                        .body(customerService.saveCustomer(customer));
+            } else {
+                System.out.println("****************User with: " + email + " already exists.**************");
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body(customer);
             }
 
-        return ResponseEntity.status(HttpStatus.ACCEPTED)
-                .body(customerService.saveCustomer(customer));
     }
 }
