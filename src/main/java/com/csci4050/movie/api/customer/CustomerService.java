@@ -18,12 +18,16 @@ public class CustomerService {
         return customerRepository.findById(id);
     }
 
-    public Customer getCustomerByEmail(String email) {
+    public Optional<Customer> getCustomerByEmail(String email) {
         if (customerRepository.findByEmail(email) == null) {
-            return new Customer();
+            return Optional.empty();
         } else {
             return customerRepository.findByEmail(email);
         }
+    }
+
+    public Customer getCustomerByEmailAndPassword(String email, String password) {
+        return customerRepository.findByEmailAndPassword(email, password);
     }
 
     public List<Customer> getAllCustomers() {
