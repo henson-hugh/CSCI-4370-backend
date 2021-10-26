@@ -26,8 +26,12 @@ public class CustomerService {
         }
     }
 
-    public Customer getCustomerByEmailAndPassword(String email, String password) {
-        return customerRepository.findByEmailAndPassword(email, password);
+    public Optional<Customer> getCustomerByEmailAndPassword(String email, String password) {
+        if (customerRepository.findByEmailAndPassword(email, password) == null) {
+            return Optional.empty();
+        } else {
+            return customerRepository.findByEmailAndPassword(email, password);
+        }
     }
 
     public List<Customer> getAllCustomers() {
