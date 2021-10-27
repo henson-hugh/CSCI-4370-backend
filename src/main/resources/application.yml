@@ -17,3 +17,16 @@ spring:
         default_schema: dev_local
   security:
     ignored: -"*.bundle.*"
+
+# Email Services
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: pidgeontheatres@gmail.com
+    password: ekgbrgbuazvwdulp
+    properties:
+      mail:
+        stmp:
+          auth: true
+          starttls:
+            enable: true

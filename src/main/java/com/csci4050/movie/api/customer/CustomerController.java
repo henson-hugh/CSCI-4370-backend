@@ -1,5 +1,6 @@
 package com.csci4050.movie.api.customer;
 
+import com.csci4050.movie.api.EmailSenderService;
 import com.csci4050.movie.api.model.Customer;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,9 @@ public class CustomerController {
     private CustomerService customerService;
 
     @Autowired
+    private EmailSenderService emailService;
+
+    @Autowired
     private ModelMapper modelMapper;
 
     @GetMapping
@@ -31,6 +35,12 @@ public class CustomerController {
         Customer customer = customerService.getCustomerById(id).get();
         CustomerDto customerDto = modelMapper.map(customer, CustomerDto.class);
         return ResponseEntity.ok().body(customerDto);
+    }
+
+    @PostMapping("/process_register")
+    public void RegisterNewCustomer(@RequestBody Customer customer) {
+        customerService.saveCustomer(customer);
+        emailService.sendConfirmationEmail(customer.getEmail());
     }
 
 }
