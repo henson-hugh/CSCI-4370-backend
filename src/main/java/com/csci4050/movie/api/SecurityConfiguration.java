@@ -13,21 +13,16 @@
 //@EnableWebSecurity
 //public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 //
-//    @Override
 //    protected void configure(HttpSecurity http) throws Exception {
-//        http.httpBasic()
-//            .and()
-//            .authorizeRequests()
-//            .antMatchers("/index.html", "/", "/home", "/login").permitAll()
-//            .anyRequest().authenticated()
-//                .and().csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse());
+//        http
+//                .csrf().disable()
+//                .authorizeRequests()
+//                .antMatchers("/register", "")
+//                .anyRequest().authenticated() // all requests are authenticated
+//                .and()
+//                .httpBasic();
+//
+//        http.cors();
 //    }
 //
-//    @Override
-//    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-//        auth.inMemoryAuthentication()
-//            .withUser("user")
-//            .password("password")
-//            .roles("USER");
-//    }
 //}
