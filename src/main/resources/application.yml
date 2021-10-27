@@ -1,12 +1,5 @@
 spring:
-  h2:
-    console:
-      enable: true
   datasource:
-#    url: jdbc:h2:mem:mydb
-#    username: sa
-#    password: password
-#    driverClassName: org.h2.Driver
     driverClassName: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/Dev_Local
     username: root
@@ -17,3 +10,14 @@ spring:
         default_schema: dev_local
   security:
     ignored: -"*.bundle.*"
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: pigeon.theatres@gmail.com
+    password: pigeon098
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true

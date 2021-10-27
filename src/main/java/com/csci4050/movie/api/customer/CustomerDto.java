@@ -1,7 +1,6 @@
 package com.csci4050.movie.api.customer;
 
 import lombok.Data;
-import java.time.LocalDate;
 
 @Data
 public class CustomerDto {
@@ -16,4 +15,10 @@ public class CustomerDto {
     private String password;
 
     private String address;
+
+    private boolean active;
+
+    private String type;
+
+    private String verificationCode;
 }

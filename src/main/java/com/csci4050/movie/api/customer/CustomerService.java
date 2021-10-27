@@ -3,6 +3,7 @@ package com.csci4050.movie.api.customer;
 import com.csci4050.movie.api.customer.CustomerRepository;
 import com.csci4050.movie.api.model.Customer;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,8 +14,14 @@ public class CustomerService {
 
     @Autowired
     private CustomerRepository customerRepository;
+//
+//    @Autowired
+//    private PasswordEncoder passwordEncoder;
 
-    public Optional<Customer> getCustomerById(Long id) {
+    @Autowired
+    private JavaMailSender mailSender;
+
+    public Optional<Customer> getCustomerById(int id) {
         return customerRepository.findById(id);
     }
 
@@ -42,7 +49,7 @@ public class CustomerService {
         return customerRepository.save(customer);
     }
 
-    public Customer updateCustomer(Long id, Customer updatedCustomer) {
+    public Customer updateCustomer(int id, Customer updatedCustomer) {
         Customer customer = customerRepository.findById(id).get();
         customer.setFirstName(updatedCustomer.getFirstName());
         customer.setLastName(updatedCustomer.getLastName());
@@ -51,7 +58,7 @@ public class CustomerService {
         return customerRepository.save(customer);
     }
 
-    public void deleteCustomer(Long id) {
+    public void deleteCustomer(int id) {
         customerRepository.deleteById(id);
     }
 }
