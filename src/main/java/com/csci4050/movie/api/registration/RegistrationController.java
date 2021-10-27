@@ -1,5 +1,6 @@
 package com.csci4050.movie.api.registration;
 
+import com.csci4050.movie.api.EmailSenderService;
 import com.csci4050.movie.api.customer.CustomerService;
 import com.csci4050.movie.api.model.Customer;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,21 +20,26 @@ public class RegistrationController {
     private CustomerService customerService;
 
     @Autowired
+    private EmailSenderService emailService;
+
+    @Autowired
     private PasswordEncoder passwordEncoder;
 
     @PostMapping(value = "/register")
     @CrossOrigin(origins = "http://localhost:4200")
     public ResponseEntity<Customer> registerCustomer(@RequestBody Customer customer) throws Exception {
-        String email = customer.getEmail();
-            Optional<Customer> resultCustomer = customerService.getCustomerByEmail(email);
-            if (resultCustomer.equals(Optional.empty())) {
-                return ResponseEntity.status(HttpStatus.ACCEPTED)
-                        .body(customerService.registerCustomer(customer));
-            } else {
-                System.out.println("****************User with: " + email + " already exists.**************");
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                        .body(customer);
-            }
+        Optional<Customer> customerByEmail = customerService.saveCustomer(customer);
+        if (!customerByEmail.isPresent()) {
+            emailService.sendConfirmationEmail(customer, customer.getEmail());
+
+            return ResponseEntity.status(HttpStatus.ACCEPTED)
+                    .body(customer);
+        } else {
+            System.out.println("****************User with: " + customer.getEmail() + " already exists.**************");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(customer);
+        }
+
     }
 
     @PostMapping(value = "/login")

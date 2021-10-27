@@ -32,6 +32,9 @@ public class Customer {
     @Column(name = "address")
     private String address;
 
+    @Column(name = "type")
+    private String type;
+
     @Column(name = "payment_card")
     private String paymentCard;
 
@@ -40,15 +43,5 @@ public class Customer {
 
     @Column(name = "type", columnDefinition = "varchar(10) default 'customer'")
     private String type = "customer";
-
-//    @Column(name = "verification_code")
-//    private String verificationCode;
-
-//    Customer(String firstName, String lastName, String email, String password, String address) {
-//        this.firstName = firstName;
-//        this.lastName = lastName;
-//        this.email = email;
-//        this.password = password;
-//        this.address = address;
-//    }
 }
+

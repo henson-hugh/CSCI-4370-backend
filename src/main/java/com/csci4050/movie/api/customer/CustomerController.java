@@ -1,5 +1,6 @@
 package com.csci4050.movie.api.customer;
 
+import com.csci4050.movie.api.EmailSenderService;
 import com.csci4050.movie.api.model.Customer;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,9 @@ import java.util.stream.Collectors;
 public class CustomerController {
     @Autowired
     private CustomerService customerService;
+
+    @Autowired
+    private EmailSenderService emailService;
 
     @Autowired
     private ModelMapper modelMapper;

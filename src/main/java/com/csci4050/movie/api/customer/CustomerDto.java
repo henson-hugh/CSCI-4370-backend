@@ -2,6 +2,8 @@ package com.csci4050.movie.api.customer;
 
 import lombok.Data;
 
+import javax.persistence.Column;
+
 @Data
 public class CustomerDto {
     private int id;
@@ -21,4 +23,6 @@ public class CustomerDto {
     private String type;
 
     private String verificationCode;
+
+    private String paymentCard;
 }
