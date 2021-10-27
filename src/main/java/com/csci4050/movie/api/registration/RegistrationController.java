@@ -39,6 +39,7 @@ public class RegistrationController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(customer);
         }
+
     }
 
     @PostMapping(value = "/login")
