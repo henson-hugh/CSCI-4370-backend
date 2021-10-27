@@ -32,14 +32,17 @@ public class Customer {
     @Column(name = "address")
     private String address;
 
+    @Column(name = "payment_card")
+    private String paymentCard;
+
     @Column(name = "active", columnDefinition = "boolean default false")
     private boolean active;
 
     @Column(name = "type", columnDefinition = "varchar(10) default 'customer'")
-    private String type;
+    private String type = "customer";
 
-    @Column(name = "verification_code")
-    private String verificationCode;
+//    @Column(name = "verification_code")
+//    private String verificationCode;
 
 //    Customer(String firstName, String lastName, String email, String password, String address) {
 //        this.firstName = firstName;
