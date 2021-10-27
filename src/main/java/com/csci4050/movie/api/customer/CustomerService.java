@@ -1,20 +1,12 @@
 package com.csci4050.movie.api.customer;
 
 import com.csci4050.movie.api.CodeGenerator;
-import com.csci4050.movie.api.customer.CustomerRepository;
 import com.csci4050.movie.api.model.Customer;
-import net.bytebuddy.utility.RandomString;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessageHelper;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import javax.mail.MessagingException;
-import javax.mail.internet.MimeMessage;
-import java.io.UnsupportedEncodingException;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,8 +22,7 @@ public class CustomerService {
     @Autowired
     private CodeGenerator codeGenerator;
 
-    public Optional<Customer> getCustomerById(Long id) {
-
+    @Autowired
     private JavaMailSender mailSender;
 
     public Optional<Customer> getCustomerById(int id) {
@@ -74,16 +65,19 @@ public class CustomerService {
             Customer registeredCustomer = customer;
             registeredCustomer.setActive(false);
             registeredCustomer.setType("customer");
-            registeredCustomer.setVerificationCode(codeGenerator.generateVerificationCode());
             //Encoding
             registeredCustomer.setPassword(passwordEncoder.encode(customer.getPassword()));
 
             if (customer.getPaymentCard() != null) {
                 registeredCustomer.setPaymentCard(passwordEncoder.encode(customer.getPaymentCard()));
             }
+            //Verification
+            registeredCustomer.setVcode(codeGenerator.generateVerificationCode());
+
             customerRepository.save(registeredCustomer);
             return Optional.empty();
         }
+    }
 
     public Customer updateCustomer(int id, Customer updatedCustomer) {
         if (customerRepository.findById(id).isPresent()) {
@@ -92,6 +86,19 @@ public class CustomerService {
             customer.setLastName(updatedCustomer.getLastName());
             customer.setPassword(updatedCustomer.getPassword());
             customer.setAddress(updatedCustomer.getAddress());
+            customer.setVcode(updatedCustomer.getVcode());
+            customer.setActive(updatedCustomer.isActive());
+            return customerRepository.save(customer);
+        } else {
+            return new Customer();
+        }
+    }
+
+    public Customer verifyCustomer(int id, Customer verifiedCustomer) {
+        if (customerRepository.findById(id).isPresent()) {
+            Customer customer = customerRepository.findById(id).get();
+            customer.setVcode(verifiedCustomer.getVcode());
+            customer.setActive(verifiedCustomer.isActive());
             return customerRepository.save(customer);
         } else {
             return new Customer();

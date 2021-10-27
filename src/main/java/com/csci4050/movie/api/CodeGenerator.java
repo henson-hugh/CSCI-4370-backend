@@ -9,8 +9,8 @@ public class CodeGenerator {
     public String generateVerificationCode() {
         String chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
         Random rnd = new Random();
-        StringBuilder sb = new StringBuilder(6);
-        for (int i = 0; i < 6; i++) {
+        StringBuilder sb = new StringBuilder(10);
+        for (int i = 0; i < 10; i++) {
             sb.append(chars.charAt(rnd.nextInt(chars.length())));
         }
         return sb.toString();

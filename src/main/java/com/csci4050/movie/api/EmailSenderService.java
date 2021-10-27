@@ -4,7 +4,12 @@ import com.csci4050.movie.api.model.Customer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
+
+import javax.mail.MessagingException;
+import javax.mail.internet.InternetHeaders;
+import javax.mail.internet.MimeMessage;
 
 @Service
 public class EmailSenderService {
@@ -12,8 +17,7 @@ public class EmailSenderService {
     @Autowired
     private JavaMailSender mailSender;
 
-    public void sendConfirmationEmail(Customer customer, String toEmail) {
-
+    public void sendConfirmationEmail(Customer customer, String toEmail){
 
         SimpleMailMessage message = new SimpleMailMessage();
 
@@ -23,7 +27,8 @@ public class EmailSenderService {
                 + "\nLast Name: " + customer.getLastName()
                 + "\nAddress: " + customer.getAddress()
                 + "\n\nVerify your account: "
-                + "http://localhost:8080/verify?code=" + customer.getVerificationCode();
+                + "http://localhost:8080/verify?code=" + customer.getVcode()
+                + "&id=" + customer.getCid();
         String subject = "Registration Confirmation";
 
 
