@@ -35,37 +35,16 @@ public class Customer {
     @Column(name = "address", unique = true)
     private String address;
 
-    @Column(name = "street")
-    private String street;
+    @Column(name = "active")
+    private boolean active;
 
-    @Column(name = "city")
-    private String city;
+    @Column(name = "type")
+    private String type;
 
-    @Column(name = "state")
-    private String state;
+    @Column(name = "verification_code")
+    private String verificationCode;
 
-    @Column(name = "zip")
-    private int zip;
-
-    @Column(name = "cnum")
-    private long cardNum;
-
-    @Column(name = "exdate")
-    private String expDate;
-
-    @Column(name = "bstreet")
-    private String billStreet;
-
-    @Column(name = "bcity")
-    private String billCity;
-
-    @Column(name = "bstate")
-    private String billState;
-
-    @Column(name = "bzip")
-    private String billZip;
-
-    @Column(name = "admin")
-    private boolean isAdmin;
+    @Column(name = "payment_card")
+    private String paymentCard;
 
 }

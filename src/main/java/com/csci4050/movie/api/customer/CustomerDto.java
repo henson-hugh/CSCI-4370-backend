@@ -19,25 +19,11 @@ public class CustomerDto {
 
     private String address;
 
-    private String street;
+    private boolean active;
 
-    private String city;
+    private String type;
 
-    private String state;
+    private String verificationCode;
 
-    private int zip;
-
-    private long cardNum;
-
-    private String expDate;
-
-    private String billStreet;
-
-    private String billCity;
-
-    private String billState;
-
-    private String billZip;
-
-    private boolean isAdmin;
+    private String paymentCard;
 }

@@ -4,10 +4,12 @@ import com.csci4050.movie.api.EmailSenderService;
 import com.csci4050.movie.api.model.Customer;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
@@ -36,11 +38,4 @@ public class CustomerController {
         CustomerDto customerDto = modelMapper.map(customer, CustomerDto.class);
         return ResponseEntity.ok().body(customerDto);
     }
-
-    @PostMapping("/process_register")
-    public void RegisterNewCustomer(@RequestBody Customer customer) {
-        customerService.saveCustomer(customer);
-        emailService.sendConfirmationEmail(customer.getEmail());
-    }
-
 }

@@ -1,8 +1,11 @@
 package com.csci4050.movie.api.customer;
 
+import com.csci4050.movie.api.CodeGenerator;
 import com.csci4050.movie.api.customer.CustomerRepository;
 import com.csci4050.movie.api.model.Customer;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,6 +16,12 @@ public class CustomerService {
 
     @Autowired
     private CustomerRepository customerRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private CodeGenerator codeGenerator;
 
     public Optional<Customer> getCustomerById(Long id) {
         return customerRepository.findById(id);
@@ -38,8 +47,24 @@ public class CustomerService {
         return (List<Customer>) customerRepository.findAll();
     };
 
-    public Customer saveCustomer(Customer customer) {
-        return customerRepository.save(customer);
+    public Optional<Customer> saveCustomer(Customer customer) {
+        Optional<Customer> customerByEmail = customerRepository.findByEmail(customer.getEmail());
+        if (customerByEmail.isPresent()) {
+            return customerByEmail;
+        } else {
+            Customer registeredCustomer = customer;
+            registeredCustomer.setActive(false);
+            registeredCustomer.setType("customer");
+            registeredCustomer.setVerificationCode(codeGenerator.generateVerificationCode());
+            //Encoding
+            registeredCustomer.setPassword(passwordEncoder.encode(customer.getPassword()));
+
+            if (customer.getPaymentCard() != null) {
+                registeredCustomer.setPaymentCard(passwordEncoder.encode(customer.getPaymentCard()));
+            }
+            customerRepository.save(registeredCustomer);
+            return Optional.empty();
+        }
     }
 
     public Customer updateCustomer(Long id, Customer updatedCustomer) {

@@ -23,10 +23,10 @@ spring:
     host: smtp.gmail.com
     port: 587
     username: pidgeontheatres@gmail.com
-    password: ekgbrgbuazvwdulp
+    password: lotfophdthvpwdpz
     properties:
       mail:
-        stmp:
+        smtp:
           auth: true
           starttls:
             enable: true
