@@ -44,17 +44,7 @@ public class EditController {
         String email = customer.getEmail();
         Customer resultCustomer = customerRepository.findCustomerByEmail(email).get();
 
-        if(resultCustomer.getPassword().equals(customer.getPassword())){
-            if (customer.getPassword().equals(customer.getPassword())){ //.getConfirmedPassword())){
-                resultCustomer.setPassword(customer.getPassword());
-            } // if
-            else{
-                System.out.println("***** Passwords do not match... Try Again *****");
-            } // else
-        } // if
-        else{
-            System.out.println("***** Incorrect Password... Try Again *****");
-        } // else
+       
 
         if(!resultCustomer.getFirstName().equals(customer.getFirstName()) && !customer.getFirstName().equals(null)){
             resultCustomer.setFirstName(customer.getFirstName());
@@ -62,14 +52,27 @@ public class EditController {
         if(!resultCustomer.getLastName().equals(customer.getLastName()) && !customer.getLastName().equals(null)){
             resultCustomer.setLastName(customer.getLastName());
         } // if
-        
+        if(resultCustomer.getPassword().equals(customer.getPassword())){
+            if (customer.getPassword().equals(customer.getPassword())){ //.getConfirmedPassword())){
+                resultCustomer.setPassword(customer.getPassword());
+            } // if
+            else{
+                System.out.println("***** Passwords do not match... Your password was not updated *****");
+            } // else
+        } // if
+        else{
+            System.out.println("***** Incorrect Password... Your password was not updated *****");
+        } // else
+         if(!resultCustomer.getBStreet().equals(customer.getBStreet()) && !customer.getBStreet().equals(null)){
+            resultCustomer.setBStreet(customer.getBStreet());
+        } // if
+        if(!resultCustomer.getCard().equals(customer.getCard()) && !customer.getCard().equals(null)){
+            resultCustomer.setCard(customer.getCard());
+        } // if
         if(!resultCustomer.getPromotion().equals(customer.getPromotion()) && !customer.getPromotion().equals(null)){
             resultCustomer.setPromotion(customer.getPromotion());
         } // if
-        if(!resultCustomer.getBStreet().equals(customer.getBStreet()) && !customer.getBStreet().equals(null)){
-            resultCustomer.setBStreet(customer.getBStreet());
-        } // if
-        if(!resultCustomer.getBCity().equals(customer.getBCity()) && !customer.getBCity().equals(null)){
+       if(!resultCustomer.getBCity().equals(customer.getBCity()) && !customer.getBCity().equals(null)){
             resultCustomer.setBCity(customer.getBCity());
         } // if
         if(!resultCustomer.getBState().equals(customer.getBState()) && !customer.getBState().equals(null)){
