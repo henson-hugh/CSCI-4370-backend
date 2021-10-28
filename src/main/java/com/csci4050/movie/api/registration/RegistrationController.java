@@ -43,7 +43,7 @@ public class RegistrationController {
 
     }
 
-    @RequestMapping(value="/verify", method= {RequestMethod.GET, RequestMethod.POST})
+    @RequestMapping(value = "/verify", method = {RequestMethod.GET, RequestMethod.POST})
     @CrossOrigin(origins = "http://localhost:4200")
     public ResponseEntity<Void> verifyAccount(@RequestParam("code") String vcode, @RequestParam("id") int cid) {
         Customer customer = customerService.getCustomerById(cid).get();
@@ -71,7 +71,7 @@ public class RegistrationController {
             System.out.println("**************** Invalid credentials **************");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(customer);
-        } else if (passwordEncoder.matches(password, match.getPassword())){ // check password with encoded password
+        } else if (passwordEncoder.matches(password, match.getPassword())) { // check password with encoded password
             session.invalidate();
             HttpSession newSession = request.getSession();
             return ResponseEntity.status(HttpStatus.ACCEPTED)

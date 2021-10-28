@@ -66,8 +66,8 @@ public class CustomerService {
             registeredCustomer.setActive(false);
             registeredCustomer.setType("customer");
             //Encoding
-            registeredCustomer.setPassword(passwordEncoder.encode(customer.getPassword()));
-
+            //registeredCustomer.setPassword(passwordEncoder.encode(customer.getPassword()));
+            registeredCustomer.setPassword(customer.getPassword());
             if (!customer.getPaymentCard().equals("")) {
                 registeredCustomer.setPaymentCard(passwordEncoder.encode(customer.getPaymentCard()));
             }
@@ -83,14 +83,35 @@ public class CustomerService {
         if (customerRepository.findById(id).isPresent()) {
             Customer customer = customerRepository.findById(id).get();
             customer.setFirstName(updatedCustomer.getFirstName());
-            customer.setLastName(updatedCustomer.getLastName());
-            customer.setPassword(updatedCustomer.getPassword());
-            customer.setStreet(updatedCustomer.getStreet());
-            customer.setCity(updatedCustomer.getCity());
-            customer.setState(updatedCustomer.getState());
-            customer.setZip(updatedCustomer.getZip());
-            customer.setVcode(updatedCustomer.getVcode());
-            customer.setActive(updatedCustomer.isActive());
+            if (!updatedCustomer.getLastName().equals("")) {
+                customer.setLastName(updatedCustomer.getLastName());
+            }
+            if (!updatedCustomer.getPassword().equals("")) {
+                customer.setPassword(updatedCustomer.getPassword());
+                //customer.setPassword(passwordEncoder.encode(updatedCustomer.getPassword()));
+            }
+            customer.setPhone(updatedCustomer.getPhone());
+            if (!updatedCustomer.getStreet().equals("")) {
+                customer.setStreet(updatedCustomer.getStreet());
+            }
+            if (!updatedCustomer.getCity().equals("")) {
+                customer.setCity(updatedCustomer.getCity());
+            }
+            if (!updatedCustomer.getState().equals("")) {
+                customer.setState(updatedCustomer.getState());
+            }
+            if (!updatedCustomer.getZip().equals("")) {
+                customer.setZip(updatedCustomer.getZip());
+            }
+
+            if (!updatedCustomer.getPaymentCard().equals("")) {
+                customer.setPaymentCard(passwordEncoder.encode(updatedCustomer.getPaymentCard()));
+            }
+            if (!updatedCustomer.getExpDate().equals("")) {
+                customer.setExpDate(updatedCustomer.getExpDate());
+            }
+            customer.setGetPromo(updatedCustomer.isGetPromo());
+
             return customerRepository.save(customer);
         } else {
             return new Customer();

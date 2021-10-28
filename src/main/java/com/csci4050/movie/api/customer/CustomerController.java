@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -33,18 +34,18 @@ public class CustomerController {
         return customerService.getAllCustomers();
     }
 
-    @GetMapping(value = "/{id}")
-    @ResponseBody
-    @CrossOrigin(origins = "http://localhost:4200")
-    public Customer getCustomerById(@PathVariable("id") int id) {
-        Optional<Customer> resultCustomer = customerService.getCustomerById(23);
-        if (resultCustomer.equals(Optional.empty())) {
-            System.out.println("**************** No Customer by id " + id + " **************");
-            return new Customer();
-        } else {
-            return resultCustomer.get();
-        }
-    }
+//    @GetMapping(value = "/{id}")
+//    @ResponseBody
+//    @CrossOrigin(origins = "http://localhost:4200")
+//    public Customer getCustomerById(@PathVariable("id") int id) {
+//        Optional<Customer> resultCustomer = customerService.getCustomerById(id);
+//        if (resultCustomer.equals(Optional.empty())) {
+//            System.out.println("**************** No Customer by id " + id + " **************");
+//            return new Customer();
+//        } else {
+//            return resultCustomer.get();
+//        }
+//    }
 
     @GetMapping(value = "/email/{email}")
     @ResponseBody
@@ -72,5 +73,50 @@ public class CustomerController {
             return ResponseEntity.status(HttpStatus.ACCEPTED)
                     .body(resultCustomer.get());
         }
+    }
+
+    @GetMapping(value = "/{id}")
+    @ResponseBody
+    @CrossOrigin(origins = "http://localhost:4200")
+    public ResponseEntity<Customer> sendEdit(@PathVariable("id") int cid) {
+
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(customerService.getCustomerById(cid).get());
+
+    }// editCustomer
+
+    @PostMapping(value = "/save")
+    @CrossOrigin(origins = "http://localhost:4200")
+    public ResponseEntity<Customer> receiveEdit(@RequestBody Customer customer) {
+        System.out.println(customer.getCid());
+        customerService.updateCustomer(customer.getCid(), customer);
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(customer);
+    }
+
+    @PostMapping(value = "/verifyPass")
+    @CrossOrigin(origins = "http://localhost:4200")
+    public ResponseEntity<Customer> verifyOldPassword(@RequestBody Customer customer) {
+        Customer customerDB = customerService.getCustomerById(customer.getCid()).get();
+        if (customerDB.getPassword().equals(customer.getPassword())) {
+            return ResponseEntity.status(HttpStatus.ACCEPTED).body(customer);
+        }
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(customer);
+
+//        String email = customer.getEmail();
+//        String password = customer.getPassword();
+//        Optional<Customer> resultCustomer = customerService.getCustomerByEmail(email);
+//        Customer match = resultCustomer.get();
+//
+//        //System.out.println("******" + password + "************");
+//        if (resultCustomer.equals(Optional.empty())) {
+//            System.out.println("**************** Invalid credentials **************");
+//            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+//                    .body(customer);
+//        } else if (passwordEncoder.matches(password, match.getPassword())) { // check password with encoded password
+//            return ResponseEntity.status(HttpStatus.ACCEPTED)
+//                    .body(match);
+//        } else {
+//            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+//                    .body(customer);
+//        }
     }
 }
