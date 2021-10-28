@@ -95,28 +95,23 @@ public class CustomerController {
     @PostMapping(value = "/verifyPass")
     @CrossOrigin(origins = "http://localhost:4200")
     public ResponseEntity<Customer> verifyOldPassword(@RequestBody Customer customer) {
-        Customer customerDB = customerService.getCustomerById(customer.getCid()).get();
-        if (customerDB.getPassword().equals(customer.getPassword())) {
-            return ResponseEntity.status(HttpStatus.ACCEPTED).body(customer);
-        }
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(customer);
 
-//        String email = customer.getEmail();
-//        String password = customer.getPassword();
-//        Optional<Customer> resultCustomer = customerService.getCustomerByEmail(email);
-//        Customer match = resultCustomer.get();
-//
-//        //System.out.println("******" + password + "************");
-//        if (resultCustomer.equals(Optional.empty())) {
-//            System.out.println("**************** Invalid credentials **************");
-//            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-//                    .body(customer);
-//        } else if (passwordEncoder.matches(password, match.getPassword())) { // check password with encoded password
-//            return ResponseEntity.status(HttpStatus.ACCEPTED)
-//                    .body(match);
-//        } else {
-//            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-//                    .body(customer);
-//        }
+        String email = customer.getEmail();
+        String password = customer.getPassword();
+        Optional<Customer> resultCustomer = customerService.getCustomerByEmail(email);
+        Customer match = resultCustomer.get();
+
+        //System.out.println("******" + password + "************");
+        if (resultCustomer.equals(Optional.empty())) {
+            System.out.println("**************** Invalid credentials **************");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(customer);
+        } else if (passwordEncoder.matches(password, match.getPassword())) { // check password with encoded password
+            return ResponseEntity.status(HttpStatus.ACCEPTED)
+                    .body(match);
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(customer);
+        }
     }
 }

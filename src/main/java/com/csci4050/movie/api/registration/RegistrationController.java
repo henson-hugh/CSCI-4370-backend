@@ -74,11 +74,30 @@ public class RegistrationController {
         } else if (passwordEncoder.matches(password, match.getPassword())) { // check password with encoded password
             session.invalidate();
             HttpSession newSession = request.getSession();
+            System.out.println(match.getCid());
             return ResponseEntity.status(HttpStatus.ACCEPTED)
                     .body(match);
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(customer);
         }
+    }
+
+    @PostMapping(value = "/forgotPass")
+    @CrossOrigin(origins = "http://localhost:4200")
+    public ResponseEntity<String> forgotPassword(@RequestBody String email) {
+        if (customerService.getCustomerByEmail(email).isPresent()) {
+            Customer customer = customerService.getCustomerByEmail(email).get();
+            emailService.sendForgotEmail(email, customer);
+            return ResponseEntity.status(HttpStatus.ACCEPTED).body(email);
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(email);
+        }
+    }
+
+    @RequestMapping(value = "/reset", method = {RequestMethod.GET, RequestMethod.POST})
+    @CrossOrigin(origins = "http://localhost:4200")
+    public ResponseEntity<Void> verifyAccount(@RequestParam("id") int cid) {
+        return ResponseEntity.status(HttpStatus.FOUND).location(URI.create("http://localhost:4200/home")).build();
     }
 }

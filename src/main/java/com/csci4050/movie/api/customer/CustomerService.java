@@ -66,8 +66,7 @@ public class CustomerService {
             registeredCustomer.setActive(false);
             registeredCustomer.setType("customer");
             //Encoding
-            //registeredCustomer.setPassword(passwordEncoder.encode(customer.getPassword()));
-            registeredCustomer.setPassword(customer.getPassword());
+            registeredCustomer.setPassword(passwordEncoder.encode(customer.getPassword()));
             if (!customer.getPaymentCard().equals("")) {
                 registeredCustomer.setPaymentCard(passwordEncoder.encode(customer.getPaymentCard()));
             }
@@ -87,8 +86,7 @@ public class CustomerService {
                 customer.setLastName(updatedCustomer.getLastName());
             }
             if (!updatedCustomer.getPassword().equals("")) {
-                customer.setPassword(updatedCustomer.getPassword());
-                //customer.setPassword(passwordEncoder.encode(updatedCustomer.getPassword()));
+                customer.setPassword(passwordEncoder.encode(updatedCustomer.getPassword()));
             }
             customer.setPhone(updatedCustomer.getPhone());
             if (!updatedCustomer.getStreet().equals("")) {

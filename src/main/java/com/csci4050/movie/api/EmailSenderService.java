@@ -41,16 +41,37 @@ public class EmailSenderService {
         mailSender.send(message);
     }
 
-        public void sendEditEmail(Customer customer) {
+    public void sendEditEmail(Customer customer) {
 
-        SimpleMailMessage msg = new SimpleMailMessage();
-        msg.setFrom("pidgeontheatres@gmail.com");
-        msg.setTo(customer.getEmail());
-        msg.setSubject("Pigeon Theathers Profile Change");
-        msg.setText("Your new profile information is: \n"
-                + "Email: " + customer.getEmail()
-                + "\nFirst Name: " + customer.getFirstName()
-                + "\nLast Name: " + customer.getLastName());
-            mailSender.send(msg);
+        SimpleMailMessage message = new SimpleMailMessage();
+
+        String body = "Your account has been changed! \n"
+                    + "Email: " + customer.getEmail()
+                    + "\nFirst Name: " + customer.getFirstName()
+                    + "\nLast Name: " + customer.getLastName()
+                    + "\nAddress: " + customer.getStreet() + " " + customer.getCity()
+                    + ", " + customer.getState() + " " + customer.getZip();
+        String subject = "Registration Confirmation";
+
+        message.setFrom("pidgeontheatres@gmail.com");
+        message.setTo(customer.getEmail());
+        message.setText(body);
+        message.setSubject(subject);
+
+        mailSender.send(message);
+    }
+
+    public void sendForgotEmail(String email, Customer customer) {
+        SimpleMailMessage message = new SimpleMailMessage();
+
+        String body = "Click here to reset your email: http://localhost:8080/reset?id=" + customer.getCid();
+        String subject = "Reset Password";
+
+        message.setFrom("pidgeontheatres@gmail.com");
+        message.setTo(email);
+        message.setText(body);
+        message.setSubject(subject);
+
+        mailSender.send(message);
     }
 }
