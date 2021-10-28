@@ -25,7 +25,8 @@ public class EmailSenderService {
                 + "Email: " + customer.getEmail()
                 + "\nFirst Name: " + customer.getFirstName()
                 + "\nLast Name: " + customer.getLastName()
-                + "\nAddress: " + customer.getAddress()
+                + "\nAddress: " + customer.getStreet() + " " + customer.getCity()
+                + ", " + customer.getState() + " " + customer.getZip()
                 + "\n\nVerify your account: "
                 + "http://localhost:8080/verify?code=" + customer.getVcode()
                 + "&id=" + customer.getCid();
@@ -49,8 +50,7 @@ public class EmailSenderService {
         msg.setText("Your new profile information is: \n"
                 + "Email: " + customer.getEmail()
                 + "\nFirst Name: " + customer.getFirstName()
-                + "\nLast Name: " + customer.getLastName()
-                + "\nAddress: " + customer.getAddress());
+                + "\nLast Name: " + customer.getLastName());
             mailSender.send(msg);
     }
 }

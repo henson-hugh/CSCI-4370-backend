@@ -68,7 +68,7 @@ public class CustomerService {
             //Encoding
             registeredCustomer.setPassword(passwordEncoder.encode(customer.getPassword()));
 
-            if (customer.getPaymentCard() != null) {
+            if (!customer.getPaymentCard().equals("")) {
                 registeredCustomer.setPaymentCard(passwordEncoder.encode(customer.getPaymentCard()));
             }
             //Verification
@@ -85,7 +85,10 @@ public class CustomerService {
             customer.setFirstName(updatedCustomer.getFirstName());
             customer.setLastName(updatedCustomer.getLastName());
             customer.setPassword(updatedCustomer.getPassword());
-            customer.setAddress(updatedCustomer.getAddress());
+            customer.setStreet(updatedCustomer.getStreet());
+            customer.setCity(updatedCustomer.getCity());
+            customer.setState(updatedCustomer.getState());
+            customer.setZip(updatedCustomer.getZip());
             customer.setVcode(updatedCustomer.getVcode());
             customer.setActive(updatedCustomer.isActive());
             return customerRepository.save(customer);
@@ -113,7 +116,6 @@ public class CustomerService {
             customer.setPassword(updatedCustomer.getPassword());
             customer.setPassword(passwordEncoder.encode(updatedCustomer.getPassword()));
             customer.setPaymentCard(passwordEncoder.encode(updatedCustomer.getPaymentCard()));
-            customer.setAddress(updatedCustomer.getAddress());
             return customerRepository.save(customer);
         } else {
             return new Customer();

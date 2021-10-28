@@ -29,11 +29,26 @@ public class Customer {
     @Column(name = "password")
     private String password;
 
-    @Column(name = "address")
-    private String address;
+    @Column(name = "phone")
+    private String phone;
+
+    @Column(name = "street")
+    private String street;
+
+    @Column(name = "city")
+    private String city;
+
+    @Column(name = "state")
+    private String state;
+
+    @Column(name = "zip")
+    private String zip;
 
     @Column(name = "payment_card")
     private String paymentCard;
+
+    @Column(name = "exp_date")
+    private String expDate;
 
     @Column(name = "active", columnDefinition = "boolean default false")
     private boolean active;
@@ -43,5 +58,8 @@ public class Customer {
 
     @Column(name = "vcode")
     private String vcode;
+
+    @Column(name = "get_promo")
+    private boolean getPromo = true;
 }
 

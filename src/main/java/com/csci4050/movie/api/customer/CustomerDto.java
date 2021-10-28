@@ -16,13 +16,25 @@ public class CustomerDto {
 
     private String password;
 
-    private String address;
+    private String phone;
+
+    private String street;
+
+    private String city;
+
+    private String state;
+
+    private String zip;
+
+    private String paymentCard;
+
+    private String expDate;
 
     private boolean active;
 
     private String type;
 
-    private String paymentCard;
-
     private String vcode;
+
+    private boolean getPromo;
 }
