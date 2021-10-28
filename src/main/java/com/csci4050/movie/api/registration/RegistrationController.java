@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.net.URI;
 import java.util.Optional;
 
 @RestController
@@ -40,6 +41,21 @@ public class RegistrationController {
                     .body(customer);
         }
 
+    }
+
+    @RequestMapping(value="/verify", method= {RequestMethod.GET, RequestMethod.POST})
+    @CrossOrigin(origins = "http://localhost:4200")
+    public ResponseEntity<Void> verifyAccount(@RequestParam("code") String vcode, @RequestParam("id") int cid) {
+        Customer customer = customerService.getCustomerById(cid).get();
+        if (customer.getVcode().equals(vcode)) {
+            customer.setActive(true);
+            customer.setVcode("Verified");
+            customerService.verifyCustomer(cid, customer);
+
+            return ResponseEntity.status(HttpStatus.FOUND).location(URI.create("http://localhost:4200/email-confirmed")).build();
+
+        }
+        return ResponseEntity.notFound().build();
     }
 
     @PostMapping(value = "/login")

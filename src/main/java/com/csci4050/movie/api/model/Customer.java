@@ -32,9 +32,6 @@ public class Customer {
     @Column(name = "address")
     private String address;
 
-    @Column(name = "type")
-    private String type;
-
     @Column(name = "payment_card")
     private String paymentCard;
 
@@ -43,5 +40,8 @@ public class Customer {
 
     @Column(name = "type", columnDefinition = "varchar(10) default 'customer'")
     private String type = "customer";
+
+    @Column(name = "vcode")
+    private String vcode;
 }
 

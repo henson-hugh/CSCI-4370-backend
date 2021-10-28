@@ -22,7 +22,7 @@ public class CustomerDto {
 
     private String type;
 
-    private String verificationCode;
-
     private String paymentCard;
+
+    private String vcode;
 }
