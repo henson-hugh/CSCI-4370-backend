@@ -88,7 +88,6 @@ public class CustomerService {
             if (!updatedCustomer.getPassword().equals("")) {
                 customer.setPassword(passwordEncoder.encode(updatedCustomer.getPassword()));
             }
-            customer.setPhone(updatedCustomer.getPhone());
             if (!updatedCustomer.getStreet().equals("")) {
                 customer.setStreet(updatedCustomer.getStreet());
             }
@@ -101,7 +100,9 @@ public class CustomerService {
             if (!updatedCustomer.getZip().equals("")) {
                 customer.setZip(updatedCustomer.getZip());
             }
-
+            if (!updatedCustomer.getPhone().equals("")) {
+                customer.setPhone(updatedCustomer.getPhone());
+            }
             if (!updatedCustomer.getPaymentCard().equals("")) {
                 customer.setPaymentCard(passwordEncoder.encode(updatedCustomer.getPaymentCard()));
             }

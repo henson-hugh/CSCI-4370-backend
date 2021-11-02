@@ -32,7 +32,6 @@ public class RegistrationController {
         Optional<Customer> customerByEmail = customerService.saveCustomer(customer);
         if (!customerByEmail.isPresent()) {
             emailService.sendConfirmationEmail(customer, customer.getEmail());
-
             return ResponseEntity.status(HttpStatus.ACCEPTED)
                     .body(customer);
         } else {
@@ -53,7 +52,6 @@ public class RegistrationController {
             customerService.verifyCustomer(cid, customer);
 
             return ResponseEntity.status(HttpStatus.FOUND).location(URI.create("http://localhost:4200/email-confirmed")).build();
-
         }
         return ResponseEntity.notFound().build();
     }

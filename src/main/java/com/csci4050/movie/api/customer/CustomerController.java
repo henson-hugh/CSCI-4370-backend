@@ -60,34 +60,31 @@ public class CustomerController {
         }
     }
 
-    @PostMapping(value = "/name/{lastName}+{firstName}")
-    @CrossOrigin(origins = "http://localhost:4200")
-    public ResponseEntity<Customer> updateCustomer(@PathVariable("lastName") String lastName, @PathVariable("firstName") String firstName) {
-        Optional<Customer> resultCustomer = customerService.getCustomerByLastNameAndFirstName(lastName, firstName);
-        if (resultCustomer.equals(Optional.empty())) {
-            System.out.println("**************** No Customer by lastname and firstname " + lastName + " " + firstName + "*******");
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(resultCustomer.get());
-        } else {
-            customerService.updateCustomerByName(lastName, firstName, resultCustomer.get());
-            return ResponseEntity.status(HttpStatus.ACCEPTED)
-                    .body(resultCustomer.get());
-        }
-    }
+//    @PostMapping(value = "/name/{lastName}+{firstName}")
+//    @CrossOrigin(origins = "http://localhost:4200")
+//    public ResponseEntity<Customer> updateCustomer(@PathVariable("lastName") String lastName, @PathVariable("firstName") String firstName) {
+//        Optional<Customer> resultCustomer = customerService.getCustomerByLastNameAndFirstName(lastName, firstName);
+//        if (resultCustomer.equals(Optional.empty())) {
+//            System.out.println("**************** No Customer by lastname and firstname " + lastName + " " + firstName + "*******");
+//            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+//                    .body(resultCustomer.get());
+//        } else {
+//            customerService.updateCustomerByName(lastName, firstName, resultCustomer.get());
+//            return ResponseEntity.status(HttpStatus.ACCEPTED)
+//                    .body(resultCustomer.get());
+//        }
+//    }
 
     @GetMapping(value = "/{id}")
     @ResponseBody
     @CrossOrigin(origins = "http://localhost:4200")
     public ResponseEntity<Customer> sendEdit(@PathVariable("id") int cid) {
-
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(customerService.getCustomerById(cid).get());
-
     }// editCustomer
 
     @PostMapping(value = "/save")
     @CrossOrigin(origins = "http://localhost:4200")
     public ResponseEntity<Customer> receiveEdit(@RequestBody Customer customer) {
-        System.out.println(customer.getCid());
         customerService.updateCustomer(customer.getCid(), customer);
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(customer);
     }
