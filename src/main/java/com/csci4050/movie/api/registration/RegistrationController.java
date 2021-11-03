@@ -97,7 +97,7 @@ public class RegistrationController {
     @CrossOrigin(origins = "http://localhost:4200")
     public ResponseEntity<Void> redirectToReset(@RequestParam("id") int cid) {
 
-        return ResponseEntity.status(HttpStatus.FOUND).location(URI.create("http://localhost:4200/password-reset-confirm")).build();
+        return ResponseEntity.status(HttpStatus.FOUND).location(URI.create("http://localhost:4200/password-reset")).build();
     }
 
     @PostMapping(value = "/resetPass")
