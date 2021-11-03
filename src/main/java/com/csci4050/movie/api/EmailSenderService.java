@@ -49,9 +49,10 @@ public class EmailSenderService {
                     + "Email: " + customer.getEmail()
                     + "\nFirst Name: " + customer.getFirstName()
                     + "\nLast Name: " + customer.getLastName()
-                    + "\nAddress: " + customer.getStreet() + " " + customer.getCity()
-                    + ", " + customer.getState() + " " + customer.getZip();
-        String subject = "Registration Confirmation";
+                    + "\nAddress: " + customer.getStreet() + ", " + customer.getCity()
+                    + ", " + customer.getState() + " " + customer.getZip()
+                    + "\nPhone: " + customer.getPhone();
+        String subject = "Changes made to Profile";
 
         message.setFrom("pidgeontheatres@gmail.com");
         message.setTo(customer.getEmail());

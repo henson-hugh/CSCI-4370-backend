@@ -83,19 +83,31 @@ public class RegistrationController {
 
     @PostMapping(value = "/forgotPass")
     @CrossOrigin(origins = "http://localhost:4200")
-    public ResponseEntity<String> forgotPassword(@RequestBody String email) {
+    public ResponseEntity<Customer> forgotPassword(@RequestBody String email) {
         if (customerService.getCustomerByEmail(email).isPresent()) {
             Customer customer = customerService.getCustomerByEmail(email).get();
             emailService.sendForgotEmail(email, customer);
-            return ResponseEntity.status(HttpStatus.ACCEPTED).body(email);
+            return ResponseEntity.status(HttpStatus.ACCEPTED).body(customer);
         } else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(email);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new Customer());
         }
     }
 
     @RequestMapping(value = "/reset", method = {RequestMethod.GET, RequestMethod.POST})
     @CrossOrigin(origins = "http://localhost:4200")
-    public ResponseEntity<Void> verifyAccount(@RequestParam("id") int cid) {
-        return ResponseEntity.status(HttpStatus.FOUND).location(URI.create("http://localhost:4200/home")).build();
+    public ResponseEntity<Void> redirectToReset(@RequestParam("id") int cid) {
+
+        return ResponseEntity.status(HttpStatus.FOUND).location(URI.create("http://localhost:4200/password-reset-confirm")).build();
+    }
+
+    @PostMapping(value = "/resetPass")
+    @CrossOrigin(origins = "http://localhost:4200")
+    public ResponseEntity<Customer> resetPassword(@RequestBody Customer customer) {
+        if (customerService.getCustomerById(customer.getCid()).isPresent()) {
+            customerService.resetCustomerPassword(customer);
+            return ResponseEntity.status(HttpStatus.ACCEPTED).body(customer);
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(customer);
+        }
     }
 }

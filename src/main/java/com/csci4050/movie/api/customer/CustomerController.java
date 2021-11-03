@@ -86,6 +86,7 @@ public class CustomerController {
     @CrossOrigin(origins = "http://localhost:4200")
     public ResponseEntity<Customer> receiveEdit(@RequestBody Customer customer) {
         customerService.updateCustomer(customer.getCid(), customer);
+        emailService.sendEditEmail(customer);
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(customer);
     }
 

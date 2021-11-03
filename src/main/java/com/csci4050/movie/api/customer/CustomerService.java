@@ -128,6 +128,12 @@ public class CustomerService {
         }
     }
 
+    public Customer resetCustomerPassword(Customer resetCustomer) {
+        Customer customer = customerRepository.findById(resetCustomer.getCid()).get();
+        customer.setPassword(passwordEncoder.encode(resetCustomer.getPassword()));
+        return customerRepository.save(customer);
+    }
+
     public Customer updateCustomerByName(String lastName, String firstName, Customer updatedCustomer) {
         if (customerRepository.findByLastNameAndFirstName(firstName, lastName).isPresent()) {
             Customer customer = customerRepository.findByLastNameAndFirstName(firstName, lastName).get();
