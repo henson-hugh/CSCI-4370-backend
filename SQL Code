@@ -1,0 +1,157 @@
+CREATE DATABASE `Cinema`;
+
+CREATE TABLE `admin` (
+	  `AdminID` int NOT NULL,
+	  PRIMARY KEY (`AdminID`)
+	) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+CREATE TABLE `theater` (
+  `TheaterID` int NOT NULL,
+  PRIMARY KEY (`TheaterID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+CREATE TABLE `customer` (
+	  `CustomerID` int NOT NULL,
+	  `FirstName` varchar(45) NOT NULL,
+	  `LastName` varchar(45) NOT NULL,
+	  `Email` varchar(45) NOT NULL,
+	  `PaymentCard` varchar(45) NOT NULL,
+	  PRIMARY KEY (`CustomerID`)
+	) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+	CREATE TABLE `user` (
+	  `UserID` int NOT NULL,
+	  `Username` varchar(45) NOT NULL,
+	  `Password` varchar(45) NOT NULL,
+	  `AdminUserID` int NOT NULL,
+	  `CustomerID` int NOT NULL,
+	  PRIMARY KEY (`UserID`),
+	  KEY `AdminUserID_idx` (`AdminUserID`),
+	  KEY `CustomerID_idx` (`CustomerID`),
+	  CONSTRAINT `AdminUserID` FOREIGN KEY (`AdminUserID`) REFERENCES `admin` (`AdminID`),
+	  CONSTRAINT `CustomerID` FOREIGN KEY (`CustomerID`) REFERENCES `customer` (`CustomerID`)
+	) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='		';
+
+CREATE TABLE `promotions` (
+	  `PromoID` int NOT NULL,
+	  `Discount` varchar(45) NOT NULL,
+	  `PromoCode` varchar(45) NOT NULL,
+	  PRIMARY KEY (`PromoID`)
+	) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+CREATE TABLE `ticktype` (
+	  `TicketTypeID` int NOT NULL,
+	  `Adult` varchar(45) NOT NULL,
+	  `Child` varchar(45) NOT NULL,
+	  `Senior` varchar(45) NOT NULL,
+	  PRIMARY KEY (`TicketTypeID`)
+	) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+    
+    CREATE TABLE `showings` (
+	  `ShowingID` int NOT NULL,
+	  `Info` varchar(45) NOT NULL,
+	  `Time` varchar(45) NOT NULL,
+	  `Duration` varchar(45) NOT NULL,
+	  `RoomNum` varchar(45) NOT NULL,
+	  `AdminID` int NOT NULL,
+	  PRIMARY KEY (`ShowingID`),
+	  KEY `AdminID_idx` (`AdminID`),
+	  CONSTRAINT `AdminID` FOREIGN KEY (`AdminID`) REFERENCES `admin` (`AdminID`)
+	) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+    
+    
+	CREATE TABLE `booking` (
+	  `BookingID` int NOT NULL,
+	  `BookingNum` varchar(45) NOT NULL,
+	  `MovieTitle` varchar(45) NOT NULL,
+	  `ShowDate` varchar(45) NOT NULL,
+	  `ShowTime` varchar(45) NOT NULL,
+	  `CardNum` varchar(45) NOT NULL,
+	  `CustBookId` int NOT NULL,
+	  `PromoID` int NOT NULL,
+	  PRIMARY KEY (`BookingID`),
+	  KEY `PromoID_idx` (`PromoID`),
+	  KEY `CustBookID_idx` (`CustBookId`),
+	  CONSTRAINT `CustBookID` FOREIGN KEY (`CustBookId`) REFERENCES `customer` (`CustomerID`),
+	  CONSTRAINT `PromoID` FOREIGN KEY (`PromoID`) REFERENCES `promotions` (`PromoID`)
+	) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='	';
+
+	
+	CREATE TABLE `customerstatus` (
+	  `CustStatID` int NOT NULL,
+	  `Active` varchar(45) NOT NULL,
+	  `Inactive` varchar(45) NOT NULL,
+	  `Suspended` varchar(45) NOT NULL,
+	  PRIMARY KEY (`CustStatID`),
+	  CONSTRAINT `CustomerStatId` FOREIGN KEY (`CustStatID`) REFERENCES `customer` (`CustomerID`)
+	) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+	CREATE TABLE `movies` (
+	  `MovieID` int NOT NULL,
+	  `Title` varchar(45) NOT NULL,
+	  `Genre` varchar(45) NOT NULL,
+	  `Cast` varchar(45) NOT NULL,
+	  `Director` varchar(45) NOT NULL,
+	  `Producer` varchar(45) NOT NULL,
+	  `Synopsis` varchar(45) NOT NULL,
+	  `Reviews` varchar(45) NOT NULL,
+	  `TrailerPic` varchar(45) NOT NULL,
+	  `TrailerVid` varchar(45) NOT NULL,
+	  `Rating` varchar(45) NOT NULL,
+	  `AdminID` int NOT NULL,
+	  `MovieShowID` int NOT NULL,
+	  PRIMARY KEY (`MovieID`),
+	  KEY `AdminID_idx` (`AdminID`),
+	  KEY `MovieShowID_idx` (`MovieShowID`),
+	  CONSTRAINT `AdminMovieID` FOREIGN KEY (`AdminID`) REFERENCES `admin` (`AdminID`),
+	  CONSTRAINT `MovieShowID` FOREIGN KEY (`MovieShowID`) REFERENCES `showings` (`ShowingID`)
+	) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+	CREATE TABLE `payment` (
+	  `PaymentID` int NOT NULL,
+	  `NameOnCard` varchar(45) NOT NULL,
+	  `CardNum` varchar(45) NOT NULL,
+	  `Billing` varchar(45) NOT NULL,
+	  `ExpDate` varchar(45) NOT NULL,
+	  `CustPayID` int NOT NULL,
+	  PRIMARY KEY (`PaymentID`),
+	  KEY `CustPayID_idx` (`CustPayID`),
+	  CONSTRAINT `CustPayID` FOREIGN KEY (`CustPayID`) REFERENCES `customer` (`CustomerID`)
+	) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+	CREATE TABLE `showroom` (
+	  `ShowRmID` int NOT NULL,
+	  `NumOfSeatsID` varchar(45) NOT NULL,
+	  `TheaterID` int NOT NULL,
+	  PRIMARY KEY (`ShowRmID`),
+	  KEY `TheaterID_idx` (`TheaterID`),
+	  CONSTRAINT `TheaterID` FOREIGN KEY (`TheaterID`) REFERENCES `theater` (`TheaterID`)
+	) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+	CREATE TABLE `showtime` (
+	  `ShowingID` int NOT NULL,
+	  `ShowRmID` int NOT NULL,
+	  KEY `ShowRmID_idx` (`ShowRmID`),
+	  KEY `ShowingID_idx` (`ShowingID`),
+	  CONSTRAINT `ShowingID` FOREIGN KEY (`ShowingID`) REFERENCES `showings` (`ShowingID`),
+	  CONSTRAINT `ShowRmID` FOREIGN KEY (`ShowRmID`) REFERENCES `showroom` (`ShowRmID`)
+	) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+	CREATE TABLE `ticket` (
+	  `TicketID` int NOT NULL,
+	  `Price` varchar(45) NOT NULL,
+	  `Seat` varchar(45) NOT NULL,
+	  `TickTypeID` int NOT NULL,
+	  PRIMARY KEY (`TicketID`),
+	  KEY `TickTypeID_idx` (`TickTypeID`),
+	  CONSTRAINT `TickTypeID` FOREIGN KEY (`TickTypeID`) REFERENCES `ticktype` (`TicketTypeID`)
+	) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+	CREATE TABLE `ticketroom` (
+	  `TickBookID` int NOT NULL,
+	  `TickID` int NOT NULL,
+	  KEY `TickID_idx` (`TickID`),
+	  KEY `TickBookID_idx` (`TickBookID`),
+	  CONSTRAINT `TickBookID` FOREIGN KEY (`TickBookID`) REFERENCES `booking` (`BookingID`),
+	  CONSTRAINT `TickID` FOREIGN KEY (`TickID`) REFERENCES `ticket` (`TicketID`)
+	) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
