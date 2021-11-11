@@ -17,17 +17,14 @@ public class Customer {
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private int cid;
 
+    @Column(name= "userid")
+    private int userid;
+
     @Column(name = "fname")
     private String firstName;
 
     @Column(name = "lname")
     private String lastName;
-
-    @Column(name = "email", unique = true)
-    private String email;
-
-    @Column(name = "password")
-    private String password;
 
     @Column(name = "phone")
     private String phone;
@@ -44,20 +41,11 @@ public class Customer {
     @Column(name = "zip")
     private String zip;
 
-    @Column(name = "payment_card")
-    private String paymentCard;
-
-    @Column(name = "exp_date")
-    private String expDate;
-
     @Column(name = "active", columnDefinition = "boolean default false")
     private boolean active;
 
-    @Column(name = "type", columnDefinition = "varchar(10) default 'customer'")
-    private String type = "customer";
-
-    @Column(name = "vcode")
-    private String vcode;
+    @Column(name = "verified", columnDefinition = "boolean default false")
+    private boolean verified;
 
     @Column(name = "get_promo")
     private boolean getPromo = true;

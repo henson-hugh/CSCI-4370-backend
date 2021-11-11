@@ -1,7 +1,13 @@
 package com.csci4050.movie.api.customer;
 
 import com.csci4050.movie.api.EmailSenderService;
+import com.csci4050.movie.api.customer.CustomerService;
 import com.csci4050.movie.api.model.Customer;
+import com.csci4050.movie.api.model.User;
+import com.csci4050.movie.api.model.Verification;
+import com.csci4050.movie.api.user.UserDto;
+import com.csci4050.movie.api.user.UserService;
+import com.csci4050.movie.api.verification.VerificationService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -10,6 +16,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
+import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -29,51 +36,58 @@ public class CustomerController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private VerificationService verificationService;
+
     @GetMapping
     public List<Customer> getAllCustomers() {
         return customerService.getAllCustomers();
     }
 
-//    @GetMapping(value = "/{id}")
-//    @ResponseBody
-//    @CrossOrigin(origins = "http://localhost:4200")
-//    public Customer getCustomerById(@PathVariable("id") int id) {
-//        Optional<Customer> resultCustomer = customerService.getCustomerById(id);
-//        if (resultCustomer.equals(Optional.empty())) {
-//            System.out.println("**************** No Customer by id " + id + " **************");
-//            return new Customer();
-//        } else {
-//            return resultCustomer.get();
-//        }
-//    }
-
-    @GetMapping(value = "/email/{email}")
-    @ResponseBody
+    // Register
+    @PostMapping(value = "/register")
     @CrossOrigin(origins = "http://localhost:4200")
-    public Customer getCustomerById(@PathVariable("email") String email) {
-        Optional<Customer> resultCustomer = customerService.getCustomerByEmail(email);
-        if (resultCustomer.equals(Optional.empty())) {
-            System.out.println("**************** No Customer by email " + email + " **************");
-            return new Customer();
-        } else {
-            return resultCustomer.get();
-        }
+    public ResponseEntity<CustomerDto> registerCustomer(@RequestBody CustomerDto customerDto) throws Exception {
+        Customer customer = modelMapper.map(customerDto, Customer.class);
+
+        // save customer
+        customerService.saveCustomer(customer);
+
+        // generate verification code
+        String code = verificationService.generateVerificationCode(customer);
+
+        // send email
+        String email = userService.getUserById(customer.getUserid()).get().getEmail();
+        emailService.sendRegistrationEmail(customer, email, code);
+
+        return ResponseEntity.status(HttpStatus.ACCEPTED)
+                .body(customerDto);
     }
 
-//    @PostMapping(value = "/name/{lastName}+{firstName}")
-//    @CrossOrigin(origins = "http://localhost:4200")
-//    public ResponseEntity<Customer> updateCustomer(@PathVariable("lastName") String lastName, @PathVariable("firstName") String firstName) {
-//        Optional<Customer> resultCustomer = customerService.getCustomerByLastNameAndFirstName(lastName, firstName);
-//        if (resultCustomer.equals(Optional.empty())) {
-//            System.out.println("**************** No Customer by lastname and firstname " + lastName + " " + firstName + "*******");
-//            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-//                    .body(resultCustomer.get());
-//        } else {
-//            customerService.updateCustomerByName(lastName, firstName, resultCustomer.get());
-//            return ResponseEntity.status(HttpStatus.ACCEPTED)
-//                    .body(resultCustomer.get());
-//        }
-//    }
+    // Verify Account
+    @RequestMapping(value = "/verify", method = {RequestMethod.GET, RequestMethod.POST})
+    @CrossOrigin(origins = "http://localhost:4200")
+    public ResponseEntity<Void> verifyAccount(@RequestParam("code") String vcode, @RequestParam("id") int cid) {
+        Customer customer = customerService.getCustomerById(cid).get();
+
+        // check verification code
+        Optional<Verification> verification = verificationService.getVerificationByCode(vcode);
+        if (verification.isPresent()) { // checks if verification matches
+            customerService.verifyCustomer(customer.getCid());
+
+            // remove vcode from repository
+            verificationService.verifyCustomer(cid);
+
+            // redirect to email confirmed page
+            return ResponseEntity.status(HttpStatus.ACCEPTED).build();
+            //return ResponseEntity.status(HttpStatus.FOUND).location(URI.create("http://localhost:4200/email-confirmed")).build();
+        }
+
+        return ResponseEntity.notFound().build();
+    }
 
     @GetMapping(value = "/{id}")
     @ResponseBody
@@ -86,30 +100,7 @@ public class CustomerController {
     @CrossOrigin(origins = "http://localhost:4200")
     public ResponseEntity<Customer> receiveEdit(@RequestBody Customer customer) {
         customerService.updateCustomer(customer.getCid(), customer);
-        emailService.sendEditEmail(customer);
+        //emailService.sendEditEmail(customer);
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(customer);
-    }
-
-    @PostMapping(value = "/verifyPass")
-    @CrossOrigin(origins = "http://localhost:4200")
-    public ResponseEntity<Customer> verifyOldPassword(@RequestBody Customer customer) {
-
-        String email = customer.getEmail();
-        String password = customer.getPassword();
-        Optional<Customer> resultCustomer = customerService.getCustomerByEmail(email);
-        Customer match = resultCustomer.get();
-
-        //System.out.println("******" + password + "************");
-        if (resultCustomer.equals(Optional.empty())) {
-            System.out.println("**************** Invalid credentials **************");
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(customer);
-        } else if (passwordEncoder.matches(password, match.getPassword())) { // check password with encoded password
-            return ResponseEntity.status(HttpStatus.ACCEPTED)
-                    .body(match);
-        } else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(customer);
-        }
     }
 }
