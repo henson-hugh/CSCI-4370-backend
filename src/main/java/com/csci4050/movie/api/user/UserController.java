@@ -1,6 +1,8 @@
 package com.csci4050.movie.api.user;
 
 import com.csci4050.movie.api.EmailSenderService;
+import com.csci4050.movie.api.admin.AdminService;
+import com.csci4050.movie.api.model.Admin;
 import com.csci4050.movie.api.model.Customer;
 import com.csci4050.movie.api.model.User;
 import org.modelmapper.ModelMapper;
@@ -19,6 +21,9 @@ public class UserController {
     private UserService userService;
 
     @Autowired
+    private AdminService adminService;
+
+    @Autowired
     private ModelMapper modelMapper;
 
     @Autowired
@@ -30,23 +35,32 @@ public class UserController {
     // Login
     @PostMapping(value = "/login")
     @CrossOrigin(origins = "http://localhost:4200")
-    public ResponseEntity<UserDto> userLogin(@RequestBody UserDto userDto) {
+    public ResponseEntity<String> userLogin(@RequestBody UserDto userDto) {
         User user = modelMapper.map(userDto, User.class);
         String email = user.getEmail();
         String password = user.getPassword();
         Optional<User> loggingUser = userService.getUserByEmail(email);
         User match = loggingUser.get();
 
+        String returnString = "";
+
         //Checks
         if (loggingUser.equals(Optional.empty())) { // check if email exists in the system
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(userDto);
+                    .body(returnString);
         } else if (passwordEncoder.matches(password, match.getPassword())) { // check password with encoded password
+            // check if admin or customer
+            Optional<Admin> admin = adminService.getAdminByUid(match.getUid());
+            if (admin.isPresent()) {
+                returnString = "Admin";
+            } else {
+                returnString = "Customer";
+            }
             return ResponseEntity.status(HttpStatus.ACCEPTED)
-                    .body(modelMapper.map(match, UserDto.class));
+                    .body(returnString);
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(userDto);
+                    .body(returnString);
         }
 
     }
