@@ -4,6 +4,7 @@ import com.csci4050.movie.api.model.Showing;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -24,11 +25,11 @@ public class ShowingService {
         Optional<Showing> returnShowing = Optional.empty();
 
         // find everything with same date
-        Optional<Showing>[] showDate = showingRepository.findAllByDate(showing.getDate());
+        List<Showing> showDate = showingRepository.findAllByDateAndRoomid(showing.getDate(), showing.getRoomid());
         // convert to showing object
-        Showing[] showingDate = new Showing[showDate.length];
-        for(int i = 0; i < showDate.length; i++) {
-            showingDate[i] = showDate[i].get();
+        Showing[] showingDate = new Showing[showDate.size()];
+        for(int i = 0; i < showDate.size(); i++) {
+            showingDate[i] = showDate.get(i);
         }
 
 

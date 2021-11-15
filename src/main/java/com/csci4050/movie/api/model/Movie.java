@@ -20,12 +20,6 @@ public class Movie {
     @Column(name = "title")
     private String title;
 
-    @Column(name = "genre")
-    private String genre;
-
-    @Column(name = "cast")
-    private String cast;
-
     @Column(name = "director")
     private String director;
 

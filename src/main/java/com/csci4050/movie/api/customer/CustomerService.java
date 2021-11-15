@@ -27,6 +27,10 @@ public class CustomerService {
         return customerRepository.findById(id);
     }
 
+    public List<Customer> getAllCustomersWithPromo() {
+        return customerRepository.findAllByGetPromo(true);
+    }
+
 
     public Optional<Customer> getCustomerByLastNameAndFirstName(String lastName, String firstName) {
         if (customerRepository.findByLastNameAndFirstName(lastName, firstName) == null) {

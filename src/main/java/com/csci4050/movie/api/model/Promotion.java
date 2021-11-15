@@ -20,6 +20,6 @@ public class Promotion {
     @Column(name = "amount")
     private double amount;
 
-    @Column(name = "pcode")
+    @Column(name = "pcode", unique = true)
     private String pcode;
 }

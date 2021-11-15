@@ -14,6 +14,8 @@ import javax.persistence.*;
 public class CastMovie {
 
     @Id
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    private int cmid;
     @Column(name= "castid")
     private int castid;
 

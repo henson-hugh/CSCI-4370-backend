@@ -1,6 +1,7 @@
 package com.csci4050.movie.api;
 
 import com.csci4050.movie.api.model.Customer;
+import com.csci4050.movie.api.model.Promotion;
 import com.csci4050.movie.api.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 import javax.mail.MessagingException;
 import javax.mail.internet.InternetHeaders;
 import javax.mail.internet.MimeMessage;
+import java.util.List;
 
 @Service
 public class EmailSenderService {
@@ -74,6 +76,20 @@ public class EmailSenderService {
         message.setText(body);
         message.setSubject(subject);
 
+        mailSender.send(message);
+    }
+
+    public void sendPromoEmail(Promotion promo, User user) {
+        SimpleMailMessage message = new SimpleMailMessage();
+
+        String body = "New promotion! \nUse code: " + promo.getPcode()
+                + "\nTo get " + (int)Math.round((1 - promo.getAmount()) * 100) + "% off on your next purchase!";
+        String subject = "New Promotions!";
+
+        message.setFrom("pidgeontheatres@gmail.com");
+        message.setText(body);
+        message.setSubject(subject);
+        message.setTo(user.getEmail());
         mailSender.send(message);
     }
 }

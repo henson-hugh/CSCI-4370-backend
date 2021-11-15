@@ -11,10 +11,6 @@ public class MovieDto {
 
     private String title;
 
-    private String genre;
-
-    private String cast;
-
     private String director;
 
     private String producer;
