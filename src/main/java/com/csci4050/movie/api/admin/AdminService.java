@@ -13,6 +13,6 @@ public class AdminService {
     private AdminRepository adminRepository;
 
     public Optional<Admin> getAdminByUid(int uid) {
-        return adminRepository.findByUserId(uid);
+        return adminRepository.findByUserid(uid);
     }
 }

@@ -78,6 +78,30 @@ public class AdminController {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(showingDto);
     }
 
+    // Delete a movie (Remove a showing)
+    @PostMapping(value = "/movie/remove-schedule")
+    @CrossOrigin(origins = "http://localhost:4200")
+    public ResponseEntity<ShowingDto> removeShowing(@RequestBody ShowingDto showingDto) {
+        Showing showing = modelMapper.map(showingDto, Showing.class);
+
+        // check to make sure there are no time conflicts
+        Optional<Showing> conflict = showingService.getConflictingShow(showing);
+        if (!conflict.isPresent()) {
+            showingService.removeShowing(showing);
+            return ResponseEntity.status(HttpStatus.ACCEPTED).body(showingDto);
+        }
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(showingDto);
+    }
+
+    // Create a promotion and send email
+
+    // Suspend a user
+
+    // Remove a user
+
+
+
 
 
 }

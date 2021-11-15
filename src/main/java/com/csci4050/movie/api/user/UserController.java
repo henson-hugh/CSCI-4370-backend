@@ -42,7 +42,7 @@ public class UserController {
         Optional<User> loggingUser = userService.getUserByEmail(email);
         User match = loggingUser.get();
 
-        String returnString = "";
+        String returnString = "Bad Request";
 
         //Checks
         if (loggingUser.equals(Optional.empty())) { // check if email exists in the system

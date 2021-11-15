@@ -10,5 +10,5 @@ import java.util.Optional;
 @Repository
 public interface AdminRepository extends CrudRepository<Admin, Integer> {
 
-    Optional<Admin> findByUserId(int userid);
+    Optional<Admin> findByUserid(int userid);
 }

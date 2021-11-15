@@ -8,7 +8,5 @@ import java.util.Optional;
 
 @Repository
 public interface ShowingRepository extends CrudRepository<Showing, Integer> {
-    Optional<Showing> findByTime(String time);
-    Optional<Showing> findByDate(String date);
-    Optional<Showing> findByDateAndTime(String date, String time);
+    Optional<Showing>[] findAllByDate(String date);
 }

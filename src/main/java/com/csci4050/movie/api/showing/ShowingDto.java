@@ -8,13 +8,13 @@ import javax.persistence.Column;
 public class ShowingDto {
     private int sid;
 
-    private String movieid;
+    private int movieid;
 
-    private String roomid;
+    private int roomid;
 
-    private String time;
+    private int time;
 
     private String date;
 
-    private String duration;
+    private int duration;
 }

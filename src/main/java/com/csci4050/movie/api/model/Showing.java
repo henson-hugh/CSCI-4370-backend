@@ -17,18 +17,18 @@ public class Showing {
     private int sid;
 
     @Column(name = "movieid")
-    private String movieid;
+    private int movieid;
 
     @Column(name = "roomid")
-    private String roomid;
+    private int roomid;
 
     @Column(name = "time")
-    private String time;
+    private int time;
 
     @Column(name = "date")
     private String date;
 
     @Column(name = "duration")
-    private String duration;
+    private int duration;
 
 }
