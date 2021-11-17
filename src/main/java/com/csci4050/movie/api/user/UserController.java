@@ -2,6 +2,7 @@ package com.csci4050.movie.api.user;
 
 import com.csci4050.movie.api.EmailSenderService;
 import com.csci4050.movie.api.admin.AdminService;
+import com.csci4050.movie.api.customer.CustomerDto;
 import com.csci4050.movie.api.customer.CustomerService;
 import com.csci4050.movie.api.model.Admin;
 import com.csci4050.movie.api.model.Customer;
@@ -14,6 +15,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -39,40 +42,42 @@ public class UserController {
     // Login
     @PostMapping(value = "/login")
     @CrossOrigin(origins = "http://localhost:4200")
-    public ResponseEntity<String> userLogin(@RequestBody UserDto userDto) {
+    public ResponseEntity<Object> userLogin(@RequestBody UserDto userDto) {
         User user = modelMapper.map(userDto, User.class);
         String email = user.getEmail();
         String password = user.getPassword();
         Optional<User> loggingUser = userService.getUserByEmail(email);
-        User match = loggingUser.get();
-
-        String returnString = "Bad Request";
-
-        //Checks
         if (loggingUser.equals(Optional.empty())) { // check if email exists in the system
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(returnString);
-        } else if (passwordEncoder.matches(password, match.getPassword())) { // check password with encoded password
-            // check if admin or customer
-            Optional<Admin> admin = adminService.getAdminByUid(match.getUid());
-            if (admin.isPresent()) {
-                returnString = "Admin";
-            } else {
+                    .body(userDto);
+        }
+        User match = loggingUser.get();
 
-                Customer customer = customerService.getCustomerById(match.getUid()).get();
-                if(customer.isSuspend() == true){
-                    return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                            .body("User Suspended");
-                }
-                returnString = "Customer";
+
+        // check login
+
+        if (passwordEncoder.matches(password, match.getPassword())) { // check password with encoded password
+
+            // package return object for login
+            Map<String, Object> map = new HashMap<String, Object>();
+            Customer customer;
+            String privilege;
+            if (adminService.getAdminByUid(match.getUid()).isPresent()) {
+                privilege = "admin";
+            } else {
+                privilege = "customer";
+                customer = customerService.getCustomerByUserid(match.getUid()).get();
+                map.put("verified", customer.isVerified());
+                map.put("suspended", customer.isSuspend());
+                map.put("cid", customer.getCid());
             }
-            return ResponseEntity.status(HttpStatus.ACCEPTED)
-                    .body(returnString);
+            map.put("privilege", privilege);
+
+            return new ResponseEntity<Object>(map, HttpStatus.ACCEPTED);
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(returnString);
+                    .body(userDto);
         }
-
     }
 
     // Register
@@ -92,6 +97,38 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.ACCEPTED)
                     .body(userDto);
         }
+    }
+
+    // Verify password for edit
+    @PostMapping(value = "/verifyPass")
+    @CrossOrigin(origins = "http://localhost:4200")
+    public ResponseEntity<Object> verifyPassword(@RequestBody UserDto userDto) {
+        User user = modelMapper.map(userDto, User.class);
+        String password = user.getPassword();
+        Optional<User> loggingUser = userService.getUserById(user.getUid());
+        if (loggingUser.equals(Optional.empty())) { // check if email exists in the system
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(userDto);
+        }
+        User match = loggingUser.get();
+        // check login
+
+        if (passwordEncoder.matches(password, match.getPassword())) { // check password with encoded password
+            return ResponseEntity.status(HttpStatus.ACCEPTED)
+                    .body(userDto);
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(modelMapper.map(match, UserDto.class));
+        }
+    }
+
+    // Update password from edit
+    @PostMapping(value = "/updatePass")
+    @CrossOrigin(origins = "http://localhost:4200")
+    public ResponseEntity<UserDto> updatePassword(@RequestBody UserDto userDto) {
+        User user = modelMapper.map(userDto, User.class);
+        userService.updatePassword(user);
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(userDto);
     }
 
     // Send Forgot Pass Email

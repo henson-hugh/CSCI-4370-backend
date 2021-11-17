@@ -31,6 +31,8 @@ public class CustomerService {
         return customerRepository.findAllByGetPromo(true);
     }
 
+    public Optional<Customer> getCustomerByUserid(int uid){ return customerRepository.findByUserid(uid); }
+
 
     public Optional<Customer> getCustomerByLastNameAndFirstName(String lastName, String firstName) {
         if (customerRepository.findByLastNameAndFirstName(lastName, firstName) == null) {
@@ -53,22 +55,22 @@ public class CustomerService {
         if (customerRepository.findById(id).isPresent()) {
             Customer customer = customerRepository.findById(id).get();
             customer.setFirstName(updatedCustomer.getFirstName());
-            if (!updatedCustomer.getLastName().equals("")) {
+            if (updatedCustomer.getLastName() != null && !updatedCustomer.getLastName().isEmpty()) {
                 customer.setLastName(updatedCustomer.getLastName());
             }
-            if (!updatedCustomer.getStreet().equals("")) {
+            if (updatedCustomer.getStreet() != null && !updatedCustomer.getStreet().isEmpty()) {
                 customer.setStreet(updatedCustomer.getStreet());
             }
-            if (!updatedCustomer.getCity().equals("")) {
+            if (updatedCustomer.getCity() != null && !updatedCustomer.getCity().isEmpty()) {
                 customer.setCity(updatedCustomer.getCity());
             }
-            if (!updatedCustomer.getState().equals("")) {
+            if (updatedCustomer.getState() != null && !updatedCustomer.getState().isEmpty()) {
                 customer.setState(updatedCustomer.getState());
             }
-            if (!updatedCustomer.getZip().equals("")) {
+            if (updatedCustomer.getZip() != null && !updatedCustomer.getZip().isEmpty()) {
                 customer.setZip(updatedCustomer.getZip());
             }
-            if (!updatedCustomer.getPhone().equals("")) {
+            if (updatedCustomer.getPhone() != null && !updatedCustomer.getPhone().isEmpty()) {
                 customer.setPhone(updatedCustomer.getPhone());
             }
             customer.setGetPromo(updatedCustomer.isGetPromo());

@@ -8,6 +8,7 @@ import com.csci4050.movie.api.model.Verification;
 import com.csci4050.movie.api.user.UserDto;
 import com.csci4050.movie.api.user.UserService;
 import com.csci4050.movie.api.verification.VerificationService;
+import jdk.internal.module.IllegalAccessLogger;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,7 +18,9 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import java.net.URI;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -71,6 +74,7 @@ public class CustomerController {
     @RequestMapping(value = "/verify", method = {RequestMethod.GET, RequestMethod.POST})
     @CrossOrigin(origins = "http://localhost:4200")
     public ResponseEntity<Void> verifyAccount(@RequestParam("code") String vcode, @RequestParam("id") int cid) {
+
         Customer customer = customerService.getCustomerById(cid).get();
 
         // check verification code
@@ -82,8 +86,7 @@ public class CustomerController {
             verificationService.verifyCustomer(cid);
 
             // redirect to email confirmed page
-            return ResponseEntity.status(HttpStatus.ACCEPTED).build();
-            //return ResponseEntity.status(HttpStatus.FOUND).location(URI.create("http://localhost:4200/email-confirmed")).build();
+            return ResponseEntity.status(HttpStatus.FOUND).location(URI.create("http://localhost:4200/email-confirmed")).build();
         }
 
         return ResponseEntity.notFound().build();
@@ -92,15 +95,21 @@ public class CustomerController {
     @GetMapping(value = "/{id}")
     @ResponseBody
     @CrossOrigin(origins = "http://localhost:4200")
-    public ResponseEntity<Customer> sendEdit(@PathVariable("id") int cid) {
-        return ResponseEntity.status(HttpStatus.ACCEPTED).body(customerService.getCustomerById(cid).get());
+    public ResponseEntity<Object> sendEdit(@PathVariable("id") int cid) {
+        Map<String, Object> map = new HashMap<String, Object>();
+        Customer customer = customerService.getCustomerById(cid).get();
+        map.put("customer", customer);
+        map.put("uid", customer.getUserid());
+
+        return new ResponseEntity<Object>(map, HttpStatus.ACCEPTED);
     }// editCustomer
 
     @PostMapping(value = "/save")
     @CrossOrigin(origins = "http://localhost:4200")
-    public ResponseEntity<Customer> receiveEdit(@RequestBody Customer customer) {
+    public ResponseEntity<CustomerDto> receiveEdit(@RequestBody CustomerDto customerdto) {
+        Customer customer = modelMapper.map(customerdto, Customer.class);
         customerService.updateCustomer(customer.getCid(), customer);
         //emailService.sendEditEmail(customer);
-        return ResponseEntity.status(HttpStatus.ACCEPTED).body(customer);
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(customerdto);
     }
 }

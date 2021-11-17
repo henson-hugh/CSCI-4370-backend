@@ -38,4 +38,11 @@ public class UserService {
         userRepository.save(newUser);
         return Optional.empty();
     }
+
+    public Optional<User> updatePassword(User user) {
+        User updateUser = userRepository.findById(user.getUid()).get();
+        updateUser.setPassword(passwordEncoder.encode(user.getPassword()));
+        userRepository.save(updateUser);
+        return Optional.empty();
+    }
 }
