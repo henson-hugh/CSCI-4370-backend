@@ -29,4 +29,6 @@ public class CustomerDto {
     private boolean verified;
 
     private boolean getPromo;
+
+    private boolean suspend; // need to make sure a customer is not suspended before log in and make sure it logs you out if you are suspended and does remember me
 }

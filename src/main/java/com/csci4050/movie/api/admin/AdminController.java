@@ -1,6 +1,7 @@
 package com.csci4050.movie.api.admin;
 
 import com.csci4050.movie.api.EmailSenderService;
+import com.csci4050.movie.api.customer.CustomerDto;
 import com.csci4050.movie.api.customer.CustomerService;
 import com.csci4050.movie.api.model.*;
 import com.csci4050.movie.api.movie.MovieDto;
@@ -171,10 +172,35 @@ public class AdminController {
     }
 
     // Suspend a user
+    @PostMapping(value = "/customer/suspend")
+    @CrossOrigin(origins = "http://localhost:4200")
+    public ResponseEntity<CustomerDto> suspendUser(@RequestBody CustomerDto customerDto) {
+        Customer customer = modelMapper.map(customerDto, Customer.class);
 
-    // Remove a user
+        // check if it exists
+        Optional<Customer> customerExist = customerService.getCustomerById(customer.getCid());
+        if (customerExist.isPresent()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(modelMapper.map(customerExist.get(), CustomerDto.class));
+        }
+        customerService.suspendCustomer(customer.getCid(), true);
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(customerDto);
+    }
 
 
+    // Remove user
+    @PostMapping(value = "/customer/remove")
+    @CrossOrigin(origins = "http://localhost:4200")
+    public ResponseEntity<CustomerDto> removeUser(@RequestBody CustomerDto customerDto) {
+        Customer customer = modelMapper.map(customerDto, Customer.class);
+
+        // check if it exists
+        Optional<Customer> customerExist = customerService.getCustomerById(customer.getCid());
+        if (customerExist.isPresent()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(modelMapper.map(customerExist.get(), CustomerDto.class));
+        }
+        customerService.deleteCustomer(customer.getCid());
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(customerDto);
+    }
 
 
 

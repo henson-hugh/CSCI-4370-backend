@@ -2,6 +2,7 @@ package com.csci4050.movie.api.user;
 
 import com.csci4050.movie.api.EmailSenderService;
 import com.csci4050.movie.api.admin.AdminService;
+import com.csci4050.movie.api.customer.CustomerService;
 import com.csci4050.movie.api.model.Admin;
 import com.csci4050.movie.api.model.Customer;
 import com.csci4050.movie.api.model.User;
@@ -22,6 +23,9 @@ public class UserController {
 
     @Autowired
     private AdminService adminService;
+
+    @Autowired
+    private CustomerService customerService;
 
     @Autowired
     private ModelMapper modelMapper;
@@ -54,6 +58,12 @@ public class UserController {
             if (admin.isPresent()) {
                 returnString = "Admin";
             } else {
+
+                Customer customer = customerService.getCustomerById(match.getUid()).get();
+                if(customer.isSuspend() == true){
+                    return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                            .body("User Suspended");
+                }
                 returnString = "Customer";
             }
             return ResponseEntity.status(HttpStatus.ACCEPTED)
