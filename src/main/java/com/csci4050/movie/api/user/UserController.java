@@ -78,6 +78,7 @@ public class UserController {
                     .body(userDto);
         } else {
             userService.saveUser(user);
+            userDto.setUid(user.getUid());
             return ResponseEntity.status(HttpStatus.ACCEPTED)
                     .body(userDto);
         }
