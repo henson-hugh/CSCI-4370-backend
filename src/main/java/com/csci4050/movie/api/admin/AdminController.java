@@ -180,10 +180,11 @@ public class AdminController {
         // check if it exists
         Optional<Customer> customerExist = customerService.getCustomerById(customer.getCid());
         if (customerExist.isPresent()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(modelMapper.map(customerExist.get(), CustomerDto.class));
+            customerService.suspendCustomer(customer.getCid(), true);
+            return ResponseEntity.status(HttpStatus.ACCEPTED).body(modelMapper.map(customerExist.get(), CustomerDto.class));
         }
-        customerService.suspendCustomer(customer.getCid(), true);
-        return ResponseEntity.status(HttpStatus.ACCEPTED).body(customerDto);
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(customerDto);
     }
 
 
@@ -196,10 +197,10 @@ public class AdminController {
         // check if it exists
         Optional<Customer> customerExist = customerService.getCustomerById(customer.getCid());
         if (customerExist.isPresent()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(modelMapper.map(customerExist.get(), CustomerDto.class));
+            customerService.deleteCustomer(customer.getCid());
+            return ResponseEntity.status(HttpStatus.ACCEPTED).body(customerDto);
         }
-        customerService.deleteCustomer(customer.getCid());
-        return ResponseEntity.status(HttpStatus.ACCEPTED).body(customerDto);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(customerDto);
     }
 
 
