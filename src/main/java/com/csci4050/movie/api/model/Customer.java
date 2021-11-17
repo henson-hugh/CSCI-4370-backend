@@ -49,5 +49,9 @@ public class Customer {
 
     @Column(name = "get_promo")
     private boolean getPromo = true;
+
+    @Column(name = "suspend", columnDefinition = "boolean default false")
+    private boolean suspend;
+
 }
 

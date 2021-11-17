@@ -89,4 +89,10 @@ public class CustomerService {
     public void deleteCustomer(int id) {
         customerRepository.deleteById(id);
     }
+
+    public Customer suspendCustomer(int cid, boolean suspend) {
+        Customer customer = customerRepository.findById(cid).get();
+        customer.setSuspend(suspend);
+        return customerRepository.save(customer);
+    }
 }
