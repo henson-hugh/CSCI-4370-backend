@@ -3,6 +3,9 @@ package com.csci4050.movie.api.showing;
 import lombok.Data;
 
 import javax.persistence.Column;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.Date;
 
 @Data
 public class ShowingDto {
@@ -12,9 +15,9 @@ public class ShowingDto {
 
     private int roomid;
 
-    private int time;
+    private LocalTime time;
 
-    private String date;
+    private LocalDate date;
 
     private int duration;
 }

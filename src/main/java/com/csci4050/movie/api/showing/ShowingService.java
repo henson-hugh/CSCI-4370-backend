@@ -1,5 +1,6 @@
 package com.csci4050.movie.api.showing;
 
+import com.csci4050.movie.api.model.Movie;
 import com.csci4050.movie.api.model.Showing;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,6 +13,8 @@ public class ShowingService {
 
     @Autowired
     private ShowingRepository showingRepository;
+
+
 
     public Optional<Showing> saveShowing(Showing showing) {
         showingRepository.save(showing);

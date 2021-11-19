@@ -1,10 +1,20 @@
 package com.csci4050.movie.api.movie;
 
 import com.csci4050.movie.api.model.*;
+import com.csci4050.movie.api.showing.ShowingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import javax.swing.text.html.Option;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,6 +29,10 @@ public class MovieService {
 
     @Autowired
     private GenreRepository genreRepository;
+
+
+    @Autowired
+    private ShowingRepository showingRepository;
 
     public Optional<Movie> getMovieByTitle(String title) {
         return movieRepository.findByTitle(title);
@@ -76,5 +90,38 @@ public class MovieService {
         }
         castRepository.save(c);
         return Optional.of(c);
+    }
+
+    public List<Movie> getMovieByGenre(String genre) {
+        return movieRepository.findAllByGenre(genre);
+    }
+
+    public List<Movie> getMovieByDirector(String director) {
+        return movieRepository.findAllByDirector(director);
+    }
+
+    public List<Movie> getMovieByProducer(String producer) {
+        return movieRepository.findAllByProducer(producer);
+    }
+
+    public List<Movie> getMovieByCast(String cast) {
+        return movieRepository.findAllByCast(cast);
+    }
+
+    public List<Movie> getMovieByCategory(String category) {
+        return movieRepository.findAllByCategory(category);
+    }
+
+    public List<Movie> getMovieByDate(LocalDate date) {
+        List<Showing> showingList = new ArrayList<Showing>(showingRepository.findAllByDate(date));
+        List<Movie> movies = new ArrayList<Movie>();
+        //LocalDate today = new LocalDate();
+
+        for (Showing showing : showingList) {
+            //     if(today.compareTo(showing.getDate()) <=0 && showing.getDate().compareTo(today.plusWeeks(2)) < 0 ){
+            //movies.add(Showing.)
+            //    }
+        }
+        return movies;
     }
 }
