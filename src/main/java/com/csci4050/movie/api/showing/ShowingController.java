@@ -43,8 +43,6 @@ public class ShowingController {
         }
         map.put("movies", movieCard);
         return new ResponseEntity<Object>(map, HttpStatus.ACCEPTED);
-
-        //return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("");
     }
 
     @PostMapping("/{id}")
@@ -52,10 +50,26 @@ public class ShowingController {
         return movieService.getMovieById(id);
     }
 
-//    @RequestMapping("/searchMovieByGenre")
-//    public List<Movie> searchMoviesByGenre(@PathVariable String genre) {
-//        return movieService.getMovieByGenre(genre);
-//    }
+    @RequestMapping("/search/genre")
+    @CrossOrigin(origins = "http://localhost:4200")
+    public ResponseEntity<Object> searchMoviesByGenre(@RequestBody String genre) {
+        List<Movie> movieList = movieService.getMovieByGenre(genre);
+        Map<String, Object> map = new HashMap<String, Object>();
+        List<MovieCard> movieCard = new ArrayList<MovieCard>();
+        for (int i = 0; i < movieList.size(); i++) {
+            if (movieList.get(i) != null) {
+                List<Genre> genres = movieService.getGenreByMovieid(movieList.get(i).getMid());
+                List<Showing> showings = showingService.getShowingsByMovieid(movieList.get(i).getMid());
+                MovieCard mc = new MovieCard();
+                mc.setMovie(movieList.get(i));
+                mc.setGenres(genres);
+                mc.setShowings(showings);
+                movieCard.add(mc);
+            }
+        }
+        map.put("movies", movieCard);
+        return new ResponseEntity<Object>(map, HttpStatus.ACCEPTED);
+    }
 
     @RequestMapping("/search/director")
     @CrossOrigin(origins = "http://localhost:4200")
@@ -97,21 +111,127 @@ public class ShowingController {
         map.put("movies", movieCard);
         return new ResponseEntity<Object>(map, HttpStatus.ACCEPTED);
     }
-//    @RequestMapping("/searchMovieByCast")
-//    public List<Movie> searchMoviesByCast(@PathVariable String Cast) {
-//        return movieService.getMovieByCast(Cast);
-//    }
 
-    @RequestMapping("/searchMovieByShowingNow")
+    @RequestMapping("/search/cast")
     @CrossOrigin(origins = "http://localhost:4200")
-    public List<Movie> searchMoviesByShowingNow(@PathVariable LocalDate date) {
-        return movieService.getMovieByShowingNow(date);
+    public ResponseEntity<Object> searchMoviesByCast(@RequestBody String name) {
+        List<Movie> movieList = movieService.getMovieByCast(name);
+        Map<String, Object> map = new HashMap<String, Object>();
+        List<MovieCard> movieCard = new ArrayList<MovieCard>();
+        for (int i = 0; i < movieList.size(); i++) {
+            if (movieList.get(i) != null) {
+                List<Genre> genres = movieService.getGenreByMovieid(movieList.get(i).getMid());
+                List<Showing> showings = showingService.getShowingsByMovieid(movieList.get(i).getMid());
+                MovieCard mc = new MovieCard();
+                mc.setMovie(movieList.get(i));
+                mc.setGenres(genres);
+                mc.setShowings(showings);
+                movieCard.add(mc);
+            }
+        }
+        map.put("movies", movieCard);
+        return new ResponseEntity<Object>(map, HttpStatus.ACCEPTED);
     }
 
-    @RequestMapping("/searchMovieByComingSoon")
+    @RequestMapping("/search/title")
     @CrossOrigin(origins = "http://localhost:4200")
-    public List<Movie> searchMoviesByComingSoon(@PathVariable LocalDate date) {
-        return movieService.getMovieByComingSoon(date);
+    public ResponseEntity<Object> searchMoviesByTitle(@RequestBody String title) {
+        List<Movie> movieList = movieService.getMoviesByTitle(title);
+        Map<String, Object> map = new HashMap<String, Object>();
+        List<MovieCard> movieCard = new ArrayList<MovieCard>();
+        for (int i = 0; i < movieList.size(); i++) {
+            if (movieList.get(i) != null) {
+                List<Genre> genres = movieService.getGenreByMovieid(movieList.get(i).getMid());
+                List<Showing> showings = showingService.getShowingsByMovieid(movieList.get(i).getMid());
+                MovieCard mc = new MovieCard();
+                mc.setMovie(movieList.get(i));
+                mc.setGenres(genres);
+                mc.setShowings(showings);
+                movieCard.add(mc);
+            }
+        }
+        map.put("movies", movieCard);
+        return new ResponseEntity<Object>(map, HttpStatus.ACCEPTED);
+    }
+
+    @RequestMapping("/search/rating")
+    @CrossOrigin(origins = "http://localhost:4200")
+    public ResponseEntity<Object> searchMoviesByRating(@RequestBody String rating) {
+        List<Movie> movieList = movieService.getMoviesByRating(rating);
+        Map<String, Object> map = new HashMap<String, Object>();
+        List<MovieCard> movieCard = new ArrayList<MovieCard>();
+        for (int i = 0; i < movieList.size(); i++) {
+            if (movieList.get(i) != null) {
+                List<Genre> genres = movieService.getGenreByMovieid(movieList.get(i).getMid());
+                List<Showing> showings = showingService.getShowingsByMovieid(movieList.get(i).getMid());
+                MovieCard mc = new MovieCard();
+                mc.setMovie(movieList.get(i));
+                mc.setGenres(genres);
+                mc.setShowings(showings);
+                movieCard.add(mc);
+            }
+        }
+        map.put("movies", movieCard);
+        return new ResponseEntity<Object>(map, HttpStatus.ACCEPTED);
+    }
+
+    @RequestMapping("/movie/info")
+    @CrossOrigin(origins = "http://localhost:4200")
+    public ResponseEntity<Object> showMovieInfo(@RequestBody int mid) {
+        Movie movie = movieService.getMovieById(mid).get();
+        List<Showing> showings = showingService.getShowingsByMovieid(mid);
+        List<Genre> genres = movieService.getGenreByMovieid(mid);
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("movie", movie);
+        map.put("showing", showings);
+        map.put("genre", genres);
+        return new ResponseEntity<Object>(map, HttpStatus.ACCEPTED);
+    }
+
+
+
+    @RequestMapping("/movie/home/now")
+    @CrossOrigin(origins = "http://localhost:4200")
+    public ResponseEntity<Object> searchMoviesByShowingNow() {
+
+        List<Movie> movieList = movieService.getMovieByShowingNow(LocalDate.now());
+        Map<String, Object> map = new HashMap<String, Object>();
+        List<MovieCard> movieCard = new ArrayList<MovieCard>();
+
+        for (int i = 0; i < (movieList.size() < 4 ? movieList.size() : 4); i++) {
+            if (movieList.get(i) != null) {
+                List<Genre> genres = movieService.getGenreByMovieid(movieList.get(i).getMid());
+                List<Showing> showings = showingService.getShowingsByMovieid(movieList.get(i).getMid());
+                MovieCard mc = new MovieCard();
+                mc.setMovie(movieList.get(i));
+                mc.setGenres(genres);
+                mc.setShowings(showings);
+                movieCard.add(mc);
+            }
+        }
+        map.put("movies", movieCard);
+        return new ResponseEntity<Object>(map, HttpStatus.ACCEPTED);
+    }
+
+    @RequestMapping("/movie/home/soon")
+    @CrossOrigin(origins = "http://localhost:4200")
+    public ResponseEntity<Object> searchMoviesByComingSoon() {
+        List<Movie> movieList = movieService.getMovieByComingSoon(LocalDate.now());
+        Map<String, Object> map = new HashMap<String, Object>();
+        List<MovieCard> movieCard = new ArrayList<MovieCard>();
+        for (int i = 0; i < (movieList.size() < 4 ? movieList.size() : 4); i++) {
+            if (movieList.get(i) != null) {
+                List<Genre> genres = movieService.getGenreByMovieid(movieList.get(i).getMid());
+                List<Showing> showings = showingService.getShowingsByMovieid(movieList.get(i).getMid());
+                MovieCard mc = new MovieCard();
+                mc.setMovie(movieList.get(i));
+                mc.setGenres(genres);
+                mc.setShowings(showings);
+                movieCard.add(mc);
+            }
+        }
+        map.put("movies", movieCard);
+        return new ResponseEntity<Object>(map, HttpStatus.ACCEPTED);
     }
 
 

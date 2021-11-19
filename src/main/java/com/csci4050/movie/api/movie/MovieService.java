@@ -108,9 +108,14 @@ public class MovieService {
         return Optional.of(c);
     }
 
-//    public List<Movie> getMovieByGenre(String genre) {
-//        return genreRepository.findAllByName(genre);
-//    }
+    public List<Movie> getMovieByGenre(String genre) {
+        List<Genre> genres = genreRepository.findAllByName(genre);
+        List<Movie> movies = new ArrayList<Movie>();
+        for (Genre g : genres) {
+            movies.add(movieRepository.findById(g.getMovieid()).get());
+        }
+        return movies;
+    }
 
     public List<Movie> getMovieByDirector(String director) {
         return movieRepository.findAllByDirector(director);
@@ -119,32 +124,51 @@ public class MovieService {
     public List<Movie> getMovieByProducer(String producer) {
         return movieRepository.findAllByProducer(producer);
     }
-/*
-    public List<Movie> getMovieByCast(String cast) {
-        return movieRepository.findAllByCast(cast);
-    }
-*/
 
-    public List<Movie> getMovieByShowingNow(LocalDate date) {
-        List<Showing> showingList = new ArrayList<Showing>(showingRepository.findAllByDate(date));
+    public List<Movie> getMovieByCast(String name) {
+        List<Cast> casts = castRepository.findAllByName(name);
         List<Movie> movies = new ArrayList<Movie>();
-        LocalDate today = LocalDate.now();
-
-        for (Showing showing : showingList) {
-            if(today.compareTo(showing.getDate()) <= 0 && showing.getDate().compareTo(today.plusWeeks(2)) > 0 ){
-                movies.add(movieRepository.findById(showing.getMovieid()).get());
-            }
+        for (Cast c : casts) {
+            movies.add(movieRepository.findById(c.getMovieid()).get());
         }
         return movies;
     }
 
+    public List<Movie> getMoviesByTitle(String title) {
+        return movieRepository.findAllByTitle(title);
+    }
+
+    public List<Movie> getMoviesByRating(String rating) {
+        return movieRepository.findAllByRating(rating);
+    }
+
+    public List<Movie> getMovieByShowingNow(LocalDate date) {
+        List<Showing> showingList = new ArrayList<Showing>(showingRepository.findAll());
+        List<Movie> movies = new ArrayList<Movie>();
+        LocalDate today = LocalDate.now();
+
+        for (Showing showing : showingList) {
+            if(showing.getDate().compareTo(today) >= 0 && showing.getDate().compareTo(today.plusWeeks(2)) < 0 ){
+                Movie m = movieRepository.findById(showing.getMovieid()).get();
+                if (!movies.contains(m)) {
+                    movies.add(m);
+                }
+            }
+        }
+        System.out.println(movies.size());
+        return movies;
+    }
+
     public List<Movie> getMovieByComingSoon(LocalDate date) {
-        List<Showing> soonList = new ArrayList<Showing>(showingRepository.findAllByDate(date));
+        List<Showing> soonList = new ArrayList<Showing>(showingRepository.findAll());
         List<Movie> movies = new ArrayList<Movie>();
         LocalDate today = LocalDate.now();
         for (Showing showing : soonList) {
-            if(showing.getDate().compareTo(today.plusWeeks(2)) <= 0 ){
-                movies.add(movieRepository.findById(showing.getMovieid()).get());
+            if(showing.getDate().compareTo(today.plusWeeks(2)) >= 0 ){
+                Movie m = movieRepository.findById(showing.getMovieid()).get();
+                if (!movies.contains(m)) {
+                    movies.add(m);
+                }
             }
         }
         return movies;
