@@ -130,6 +130,10 @@ public class MovieService {
         return movies;
     }
 
+    public List<Genre> getGenreByMovieid(int mid) {
+        return genreRepository.findAllByMovieid(mid);
+    }
+
     //public List<Movie> getAll(){
       //  return
     //}
