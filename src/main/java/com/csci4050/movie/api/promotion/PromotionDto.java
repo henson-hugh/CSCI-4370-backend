@@ -7,7 +7,7 @@ public class PromotionDto {
 
     private int pid;
 
-    private double amount;
+    private double discount;
 
     private String pcode;
 }

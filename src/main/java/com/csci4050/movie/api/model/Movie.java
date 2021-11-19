@@ -35,6 +35,9 @@ public class Movie {
     @Column(name = "trailervid")
     private String trailervid;
 
+    @Column(name = "duration")
+    private int duration;
+
     @Column(name = "rating")
-    private double rating;
+    private String rating;
 }

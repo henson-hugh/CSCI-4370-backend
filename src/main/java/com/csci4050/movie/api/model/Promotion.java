@@ -17,8 +17,8 @@ public class Promotion {
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private int pid;
 
-    @Column(name = "amount")
-    private double amount;
+    @Column(name = "discount")
+    private double discount;
 
     @Column(name = "pcode", unique = true)
     private String pcode;

@@ -20,6 +20,6 @@ public class Genre {
     @Column(name= "movieid")
     private int movieid;
 
-    @Column(name= "genre")
-    private String genre;
+    @Column(name= "name")
+    private String name;
 }

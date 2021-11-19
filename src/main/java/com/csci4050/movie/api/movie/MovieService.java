@@ -26,6 +26,10 @@ public class MovieService {
     @Autowired
     private ShowingRepository showingRepository;
 
+    public Optional<Movie> getMovieById(int id) {
+        return movieRepository.findById(id);
+    }
+
     public Optional<Movie> getMovieByTitle(String title) {
         return movieRepository.findByTitle(title);
     }
@@ -35,16 +39,36 @@ public class MovieService {
         return Optional.empty();
     }
 
+    public Optional<Movie> editMovie(Movie movie) {
+        Optional<Movie> exist = movieRepository.findById(movie.getMid());
+        if (exist.isPresent()) {
+            Movie newMovie = exist.get();
+            newMovie.setDirector(movie.getDirector());
+            newMovie.setTitle(movie.getTitle());
+            newMovie.setProducer(movie.getProducer());
+            newMovie.setSynopsis(movie.getSynopsis());
+            newMovie.setDuration(movie.getDuration());
+            newMovie.setTrailerpic(movie.getTrailerpic());
+            newMovie.setTrailervid(movie.getTrailervid());
+            newMovie.setRating(movie.getRating());
+
+            movieRepository.save(newMovie);
+            return exist;
+        }
+
+        return Optional.empty();
+    }
+
     public Optional<Movie> removeMovie(Movie movie) {
         movieRepository.delete(movie);
         return Optional.empty();
     }
 
     //Genre
-    public Optional<String> getGenreByGenre(String genre) {
-        Optional<Genre> g = genreRepository.findByGenre(genre);
+    public Optional<String> getGenreByName(String genre) {
+        Optional<Genre> g = genreRepository.findByName(genre);
         if (g.isPresent()) {
-            return Optional.of(g.get().getGenre());
+            return Optional.of(g.get().getName());
         }
         return Optional.empty();
     }
@@ -52,9 +76,9 @@ public class MovieService {
     public Optional<Genre> addGenre(String genre, int mid) {
         Genre g = new Genre();
         g.setMovieid(mid);
-        g.setGenre(genre);
+        g.setName(genre);
         // check if overlaps exist
-        Optional<Genre> check = genreRepository.findByGenreAndMovieid(genre, mid);
+        Optional<Genre> check = genreRepository.findByNameAndMovieid(genre, mid);
         if (check.isPresent()) {
             return Optional.empty();
         }
@@ -84,6 +108,10 @@ public class MovieService {
         return Optional.of(c);
     }
 
+//    public List<Movie> getMovieByGenre(String genre) {
+//        return genreRepository.findAllByName(genre);
+//    }
+
     public List<Movie> getMovieByDirector(String director) {
         return movieRepository.findAllByDirector(director);
     }
@@ -91,10 +119,11 @@ public class MovieService {
     public List<Movie> getMovieByProducer(String producer) {
         return movieRepository.findAllByProducer(producer);
     }
-
-    public List<Movie> getMovieByCategory(String category) {
-        return movieRepository.findAllByCategory(category);
+/*
+    public List<Movie> getMovieByCast(String cast) {
+        return movieRepository.findAllByCast(cast);
     }
+*/
 
     public List<Movie> getMovieByShowingNow(LocalDate date) {
         List<Showing> showingList = new ArrayList<Showing>(showingRepository.findAllByDate(date));
@@ -103,7 +132,7 @@ public class MovieService {
 
         for (Showing showing : showingList) {
             if(today.compareTo(showing.getDate()) <= 0 && showing.getDate().compareTo(today.plusWeeks(2)) > 0 ){
-                movies.add(movieRepository.findByMid(showing.getMovieid()));
+                movies.add(movieRepository.findById(showing.getMovieid()).get());
             }
         }
         return movies;
@@ -115,12 +144,33 @@ public class MovieService {
         LocalDate today = LocalDate.now();
         for (Showing showing : soonList) {
             if(showing.getDate().compareTo(today.plusWeeks(2)) <= 0 ){
-                movies.add(movieRepository.findByMid(showing.getMovieid()));
+                movies.add(movieRepository.findById(showing.getMovieid()).get());
             }
         }
         return movies;
     }
 
+    public List<Movie> getAllMovies(){
+        return movieRepository.findAll();
+    }
+
+    public List<Genre> getGenreByMovieid(int mid) {
+        return genreRepository.findAllByMovieid(mid);
+    }
+
+    //public List<Movie> getAll(){
+      //  return
+    //}
+
+    /*
+    public List<Movie> getMovieByCast(String cast) {
+
+        //Get all movies
+        // loop thorough and look for specific cast members
+        // return a list of movies that have the cast member in it
+        List<Movie> movies = movieRepository.findAll();
+        List<Cast> c = new ArrayList<Cast>();
+        for(Cast cast : movies){
 
     public List<Movie> getMovieByCast(String name) {
         List<Cast> castlist = castRepository.findAllByName(name);

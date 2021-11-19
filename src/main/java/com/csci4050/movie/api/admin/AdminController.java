@@ -11,6 +11,7 @@ import com.csci4050.movie.api.promotion.PromotionService;
 import com.csci4050.movie.api.showing.ShowingDto;
 import com.csci4050.movie.api.showing.ShowingService;
 import com.csci4050.movie.api.user.UserService;
+import org.apache.coyote.Response;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,9 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.swing.text.html.Option;
-import java.util.List;
-import java.util.Locale;
-import java.util.Optional;
+import java.util.*;
 
 @RestController
 @RequestMapping("/admin")
@@ -50,6 +49,27 @@ public class AdminController {
     @Autowired
     private EmailSenderService emailSenderService;
 
+    @PostMapping("/movie/id/{id}")
+    @CrossOrigin(origins = "http://localhost:4200")
+    public ResponseEntity<Object> searchMoviesById(@PathVariable int id) {
+
+        Optional<Movie> movie = movieService.getMovieById(id);
+        if (movie.isPresent()) {
+            Map<String, Object> map = new HashMap<String, Object>();
+
+            List<Genre> genres = movieService.getGenreByMovieid(movie.get().getMid());
+            List<Showing> showings = showingService.getShowingsByMovieid(movie.get().getMid());
+
+            map.put("movie", movie.get());
+            map.put("genres", genres);
+            map.put("showings", showings);
+
+            return new ResponseEntity<Object>(map, HttpStatus.ACCEPTED);
+        }
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("");
+    }
+
     // Add movie
     @PostMapping(value = "/movie/add")
     @CrossOrigin(origins = "http://localhost:4200")
@@ -59,11 +79,30 @@ public class AdminController {
         // check if movie exists
         Optional<Movie> movieExist = movieService.getMovieByTitle(movie.getTitle());
         if (movieExist.isPresent()) {
+            System.out.println(movie.getTitle());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(modelMapper.map(movieExist.get(), MovieDto.class));
         }
 
         movieService.saveMovie(movie);
+        movieDto.setMid(movieService.getMovieByTitle(movie.getTitle()).get().getMid());
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(movieDto);
+    }
+
+    // Edit movie
+    // Add movie
+    @PostMapping(value = "/movie/edit")
+    @CrossOrigin(origins = "http://localhost:4200")
+    public ResponseEntity<MovieDto> editMovie(@RequestBody MovieDto movieDto) {
+        Movie movie = modelMapper.map(movieDto, Movie.class);
+
+        // check if movie exists
+        Optional<Movie> movieExist = movieService.getMovieById(movie.getMid());
+        if (movieExist.isPresent()) {
+            movieService.editMovie(movie);
+            return ResponseEntity.status(HttpStatus.ACCEPTED).body(modelMapper.map(movieExist.get(), MovieDto.class));
+        }
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(movieDto);
     }
 
     // Remove movie

@@ -19,6 +19,4 @@ public class ShowingDto {
     private LocalTime time;
 
     private LocalDate date;
-
-    private int duration;
 }
