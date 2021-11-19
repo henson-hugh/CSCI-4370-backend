@@ -83,7 +83,7 @@ public class EmailSenderService {
         SimpleMailMessage message = new SimpleMailMessage();
 
         String body = "New promotion! \nUse code: " + promo.getPcode()
-                + "\nTo get " + (int)Math.round((1 - promo.getAmount()) * 100) + "% off on your next purchase!";
+                + "\nTo get " + (int)Math.round((1 - promo.getDiscount()) * 100) + "% off on your next purchase!";
         String subject = "New Promotions!";
 
         message.setFrom("pidgeontheatres@gmail.com");

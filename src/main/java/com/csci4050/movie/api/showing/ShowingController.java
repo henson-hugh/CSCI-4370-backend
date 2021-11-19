@@ -18,10 +18,15 @@ public class ShowingController {
     @Autowired
     private MovieService movieService;
 
-    @RequestMapping("/searchMovieByGenre")
-    public List<Movie> searchMoviesByGenre(@PathVariable String genre) {
-        return movieService.getMovieByGenre(genre);
+    @PostMapping("/{id}")
+    public Optional<Movie> searchMoviesById(@PathVariable int id) {
+        return movieService.getMovieById(id);
     }
+
+//    @RequestMapping("/searchMovieByGenre")
+//    public List<Movie> searchMoviesByGenre(@PathVariable String genre) {
+//        return movieService.getMovieByGenre(genre);
+//    }
 
     @RequestMapping("/searchMovieByDirector")
     public List<Movie> searchMoviesByDirector(@PathVariable String director) {
@@ -31,15 +36,10 @@ public class ShowingController {
     public List<Movie> searchMoviesByProducer(@PathVariable String producer) {
         return movieService.getMovieByProducer(producer);
     }
-    @RequestMapping("/searchMovieByCast")
-    public List<Movie> searchMoviesByCast(@PathVariable String Cast) {
-        return movieService.getMovieByCast(Cast);
-    }
-
-    @RequestMapping("/searchMovieByCategory")
-    public List<Movie> searchMoviesByCategory(@PathVariable String Category) {
-        return movieService.getMovieByCategory(Category);
-    }
+//    @RequestMapping("/searchMovieByCast")
+//    public List<Movie> searchMoviesByCast(@PathVariable String Cast) {
+//        return movieService.getMovieByCast(Cast);
+//    }
 
     @RequestMapping("/searchMovieByShowingNow")
     public List<Movie> searchMoviesByShowingNow(@PathVariable LocalDate date) {

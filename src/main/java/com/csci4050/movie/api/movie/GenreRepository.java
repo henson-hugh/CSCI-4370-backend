@@ -9,7 +9,7 @@ import java.util.Optional;
 
 @Repository
 public interface GenreRepository extends CrudRepository<Genre, Integer> {
-    Optional<Genre> findByGenre(String genre);
-    Optional<Genre> findByGenreAndMovieid(String genre, int movieid);
-
+    Optional<Genre> findByName(String name);
+    Optional<Genre> findByNameAndMovieid(String name, int movieid);
+    List<Genre> findAllByName(String name);
 }

@@ -35,19 +35,19 @@ public class ShowingService {
             showingDate[i] = showDate.get(i);
         }
 
-        // if showing's start time or end time is within the duration of an existing showing, return the existing showing
-        for(Showing s : showingDate) {
-            // starting time check (if showing starts after start of another show, or before the end of another show)
-            if (showing.getTime().compareTo(s.getTime()) >= 0 && showing.getTime().compareTo(s.getTime().plusMinutes(s.getDuration())) <= 0){ // operators might be wrong, It is hard to tell <= 0
-                    //showing.getTime() >= s.getTime() && showing.getTime() <= s.getTime() + s.getDuration()) {
-                returnShowing = Optional.of(s);
-            }
-
-            // ending time check (if show ends after the start of another show, or before the end of another show)
-            if (showing.getTime().plusMinutes(showing.getDuration()).compareTo(s.getTime()) > 0 && showing.getTime().plusMinutes(showing.getDuration()).compareTo(s.getTime().plusMinutes(s.getDuration())) <= 0) {
-                returnShowing = Optional.of(s);
-            }
-        }
+//        // if showing's start time or end time is within the duration of an existing showing, return the existing showing
+//        for(Showing s : showingDate) {
+//            // starting time check (if showing starts after start of another show, or before the end of another show)
+//            if (showing.getTime().compareTo(s.getTime()) >= 0 && showing.getTime().compareTo(s.getTime().plusMinutes(s.getDuration())) <= 0){ // operators might be wrong, It is hard to tell <= 0
+//                    //showing.getTime() >= s.getTime() && showing.getTime() <= s.getTime() + s.getDuration()) {
+//                returnShowing = Optional.of(s);
+//            }
+//
+//            // ending time check (if show ends after the start of another show, or before the end of another show)
+//            if (showing.getTime().plusMinutes(showing.getDuration()).compareTo(s.getTime()) > 0 && showing.getTime().plusMinutes(showing.getDuration()).compareTo(s.getTime().plusMinutes(s.getDuration())) <= 0) {
+//                returnShowing = Optional.of(s);
+//            }
+//        }
         return returnShowing;
     }
 

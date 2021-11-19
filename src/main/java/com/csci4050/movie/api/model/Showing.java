@@ -29,9 +29,4 @@ public class Showing {
 
     @Column(name = "date")
     private LocalDate date;
-
-    @Column(name = "duration")
-    private int duration;
-
-
 }

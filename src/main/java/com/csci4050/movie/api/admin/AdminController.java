@@ -50,6 +50,12 @@ public class AdminController {
     @Autowired
     private EmailSenderService emailSenderService;
 
+    @PostMapping("/movie/id/{id}")
+    @CrossOrigin(origins = "http://localhost:4200")
+    public Optional<Movie> searchMoviesById(@PathVariable int id) {
+        return movieService.getMovieById(id);
+    }
+
     // Add movie
     @PostMapping(value = "/movie/add")
     @CrossOrigin(origins = "http://localhost:4200")

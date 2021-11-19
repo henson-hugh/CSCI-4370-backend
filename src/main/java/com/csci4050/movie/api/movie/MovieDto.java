@@ -23,5 +23,5 @@ public class MovieDto {
 
     private int duration;
 
-    private double rating;
+    private String rating;
 }
