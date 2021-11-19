@@ -21,5 +21,7 @@ public class MovieDto {
 
     private String trailervid;
 
+    private int duration;
+
     private double rating;
 }

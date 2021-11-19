@@ -3,16 +3,8 @@ package com.csci4050.movie.api.movie;
 import com.csci4050.movie.api.model.*;
 import com.csci4050.movie.api.showing.ShowingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 
-import javax.swing.text.html.Option;
-import java.sql.Connection;
-import java.sql.ResultSet;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -103,25 +95,67 @@ public class MovieService {
     public List<Movie> getMovieByProducer(String producer) {
         return movieRepository.findAllByProducer(producer);
     }
-
+/*
     public List<Movie> getMovieByCast(String cast) {
         return movieRepository.findAllByCast(cast);
     }
-
+*/
     public List<Movie> getMovieByCategory(String category) {
         return movieRepository.findAllByCategory(category);
     }
 
-    public List<Movie> getMovieByDate(LocalDate date) {
+    public List<Movie> getMovieByShowingNow(LocalDate date) {
         List<Showing> showingList = new ArrayList<Showing>(showingRepository.findAllByDate(date));
         List<Movie> movies = new ArrayList<Movie>();
-        //LocalDate today = new LocalDate();
+        LocalDate today = LocalDate.now();
 
         for (Showing showing : showingList) {
-            //     if(today.compareTo(showing.getDate()) <=0 && showing.getDate().compareTo(today.plusWeeks(2)) < 0 ){
-            //movies.add(Showing.)
-            //    }
+            if(today.compareTo(showing.getDate()) <= 0 && showing.getDate().compareTo(today.plusWeeks(2)) > 0 ){
+                movies.add(movieRepository.findByMid(showing.getMovieid()));
+            }
         }
         return movies;
     }
+
+    public List<Movie> getMovieByComingSoon(LocalDate date) {
+        List<Showing> soonList = new ArrayList<Showing>(showingRepository.findAllByDate(date));
+        List<Movie> movies = new ArrayList<Movie>();
+        LocalDate today = LocalDate.now();
+        for (Showing showing : soonList) {
+            if(showing.getDate().compareTo(today.plusWeeks(2)) <= 0 ){
+                movies.add(movieRepository.findByMid(showing.getMovieid()));
+            }
+        }
+        return movies;
+    }
+
+    //public List<Movie> getAll(){
+      //  return
+    //}
+
+    /*
+    public List<Movie> getMovieByCast(String cast) {
+
+        //Get all movies
+        // loop thorough and look for specific cast members
+        // return a list of movies that have the cast member in it
+        List<Movie> movies = movieRepository.findAll();
+        List<Cast> c = new ArrayList<Cast>();
+        for(Cast cast : movies){
+
+        }
+        Optional<Cast> c = castRepository.findByName(cast);
+        // List<Cast> soonList = new ArrayList<Cast>(castRepository.findAllByCast(Cast));
+        List<Movie> movies = new ArrayList<Movie>();
+        //for (Cast cast : soonList) {
+        //    if(showing.getDate().compareTo(today.plusWeeks(2)) <= 0 ){
+          //      movies.add(castRepository.findByCast(showing.getC()));
+          //  }
+        //}
+        if(movie.getCast)
+        return movies;
+    }*/
+
+
+
 }
