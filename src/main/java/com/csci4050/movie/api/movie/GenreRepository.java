@@ -1,5 +1,6 @@
 package com.csci4050.movie.api.movie;
 
+import com.csci4050.movie.api.model.Cast;
 import com.csci4050.movie.api.model.Genre;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
@@ -11,5 +12,6 @@ import java.util.Optional;
 public interface GenreRepository extends CrudRepository<Genre, Integer> {
     Optional<Genre> findByGenre(String genre);
     Optional<Genre> findByGenreAndMovieid(String genre, int movieid);
+    List<Genre> findAllByGenre(String genre);
 
 }

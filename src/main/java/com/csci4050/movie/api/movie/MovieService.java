@@ -84,10 +84,6 @@ public class MovieService {
         return Optional.of(c);
     }
 
-    public List<Movie> getMovieByGenre(String genre) {
-        return movieRepository.findAllByGenre(genre);
-    }
-
     public List<Movie> getMovieByDirector(String director) {
         return movieRepository.findAllByDirector(director);
     }
@@ -95,11 +91,7 @@ public class MovieService {
     public List<Movie> getMovieByProducer(String producer) {
         return movieRepository.findAllByProducer(producer);
     }
-/*
-    public List<Movie> getMovieByCast(String cast) {
-        return movieRepository.findAllByCast(cast);
-    }
-*/
+
     public List<Movie> getMovieByCategory(String category) {
         return movieRepository.findAllByCategory(category);
     }
@@ -129,33 +121,25 @@ public class MovieService {
         return movies;
     }
 
-    //public List<Movie> getAll(){
-      //  return
-    //}
 
-    /*
-    public List<Movie> getMovieByCast(String cast) {
-
-        //Get all movies
-        // loop thorough and look for specific cast members
-        // return a list of movies that have the cast member in it
-        List<Movie> movies = movieRepository.findAll();
-        List<Cast> c = new ArrayList<Cast>();
-        for(Cast cast : movies){
-
+    public List<Movie> getMovieByCast(String name) {
+        List<Cast> castlist = castRepository.findAllByName(name);
+        List<Movie> movieList = new ArrayList<Movie>();
+        for (Cast c : castlist) {
+            Movie m = movieRepository.findByMid(c.getMovieid());
+            movieList.add(m);
         }
-        Optional<Cast> c = castRepository.findByName(cast);
-        // List<Cast> soonList = new ArrayList<Cast>(castRepository.findAllByCast(Cast));
-        List<Movie> movies = new ArrayList<Movie>();
-        //for (Cast cast : soonList) {
-        //    if(showing.getDate().compareTo(today.plusWeeks(2)) <= 0 ){
-          //      movies.add(castRepository.findByCast(showing.getC()));
-          //  }
-        //}
-        if(movie.getCast)
-        return movies;
-    }*/
+        return movieList;
+    }
 
-
+    public List<Movie> getMovieByGenre(String genre) {
+        List<Genre> genrelist = genreRepository.findAllByGenre(genre);
+        List<Movie> movieList = new ArrayList<Movie>();
+        for (Genre g : genrelist) {
+            Movie m = movieRepository.findByMid(g.getMovieid());
+            movieList.add(m);
+        }
+        return movieList;
+    }
 
 }
