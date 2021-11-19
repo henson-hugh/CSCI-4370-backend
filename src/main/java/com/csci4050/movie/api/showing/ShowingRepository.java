@@ -13,6 +13,7 @@ import java.util.Optional;
 public interface ShowingRepository extends CrudRepository<Showing, Integer> {
     List<Showing> findAllByDateAndRoomid(LocalDate date, int roomid);
     List<Showing> findAllByDate(LocalDate date);
+    List<Showing> findAllByMovieid(int movieid);
 
 
 }

@@ -39,6 +39,26 @@ public class MovieService {
         return Optional.empty();
     }
 
+    public Optional<Movie> editMovie(Movie movie) {
+        Optional<Movie> exist = movieRepository.findById(movie.getMid());
+        if (exist.isPresent()) {
+            Movie newMovie = exist.get();
+            newMovie.setDirector(movie.getDirector());
+            newMovie.setTitle(movie.getTitle());
+            newMovie.setProducer(movie.getProducer());
+            newMovie.setSynopsis(movie.getSynopsis());
+            newMovie.setDuration(movie.getDuration());
+            newMovie.setTrailerpic(movie.getTrailerpic());
+            newMovie.setTrailervid(movie.getTrailervid());
+            newMovie.setRating(movie.getRating());
+
+            movieRepository.save(newMovie);
+            return exist;
+        }
+
+        return Optional.empty();
+    }
+
     public Optional<Movie> removeMovie(Movie movie) {
         movieRepository.delete(movie);
         return Optional.empty();
@@ -128,6 +148,10 @@ public class MovieService {
             }
         }
         return movies;
+    }
+
+    public List<Movie> getAllMovies(){
+        return movieRepository.findAll();
     }
 
     public List<Genre> getGenreByMovieid(int mid) {

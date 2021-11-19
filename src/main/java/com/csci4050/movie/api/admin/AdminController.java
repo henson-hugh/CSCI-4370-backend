@@ -58,9 +58,12 @@ public class AdminController {
             Map<String, Object> map = new HashMap<String, Object>();
 
             List<Genre> genres = movieService.getGenreByMovieid(movie.get().getMid());
+            List<Showing> showings = showingService.getShowingsByMovieid(movie.get().getMid());
 
             map.put("movie", movie.get());
             map.put("genres", genres);
+            map.put("showings", showings);
+
             return new ResponseEntity<Object>(map, HttpStatus.ACCEPTED);
         }
 
@@ -76,11 +79,30 @@ public class AdminController {
         // check if movie exists
         Optional<Movie> movieExist = movieService.getMovieByTitle(movie.getTitle());
         if (movieExist.isPresent()) {
+            System.out.println(movie.getTitle());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(modelMapper.map(movieExist.get(), MovieDto.class));
         }
 
         movieService.saveMovie(movie);
+        movieDto.setMid(movieService.getMovieByTitle(movie.getTitle()).get().getMid());
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(movieDto);
+    }
+
+    // Edit movie
+    // Add movie
+    @PostMapping(value = "/movie/edit")
+    @CrossOrigin(origins = "http://localhost:4200")
+    public ResponseEntity<MovieDto> editMovie(@RequestBody MovieDto movieDto) {
+        Movie movie = modelMapper.map(movieDto, Movie.class);
+
+        // check if movie exists
+        Optional<Movie> movieExist = movieService.getMovieById(movie.getMid());
+        if (movieExist.isPresent()) {
+            movieService.editMovie(movie);
+            return ResponseEntity.status(HttpStatus.ACCEPTED).body(modelMapper.map(movieExist.get(), MovieDto.class));
+        }
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(movieDto);
     }
 
     // Remove movie

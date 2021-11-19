@@ -9,6 +9,7 @@ import java.util.Optional;
 
 @Repository
 public interface MovieRepository extends CrudRepository<Movie, Integer> {
+    List<Movie> findAll();
     Optional<Movie> findByTitle(String title);
     List<Movie> findAllByDirector(String director);
     List<Movie> findAllByProducer(String producer);
