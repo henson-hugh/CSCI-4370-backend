@@ -3,6 +3,7 @@ package com.csci4050.movie.api.showing;
 import lombok.Data;
 
 import javax.persistence.Column;
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Date;

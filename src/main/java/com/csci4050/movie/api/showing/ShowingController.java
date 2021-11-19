@@ -22,6 +22,7 @@ public class ShowingController {
     public List<Movie> searchMoviesByGenre(@PathVariable String genre) {
         return movieService.getMovieByGenre(genre);
     }
+
     @RequestMapping("/searchMovieByDirector")
     public List<Movie> searchMoviesByDirector(@PathVariable String director) {
         return movieService.getMovieByDirector(director);
@@ -34,15 +35,23 @@ public class ShowingController {
     public List<Movie> searchMoviesByCast(@PathVariable String Cast) {
         return movieService.getMovieByCast(Cast);
     }
+
     @RequestMapping("/searchMovieByCategory")
     public List<Movie> searchMoviesByCategory(@PathVariable String Category) {
         return movieService.getMovieByCategory(Category);
     }
 
-    @RequestMapping("/searchMovieByDate")
-    public List<Movie> searchMoviesByDate(@PathVariable LocalDate date) {
-        return movieService.getMovieByDate(date);
+    @RequestMapping("/searchMovieByShowingNow")
+    public List<Movie> searchMoviesByShowingNow(@PathVariable LocalDate date) {
+        return movieService.getMovieByShowingNow(date);
     }
+
+    @RequestMapping("/searchMovieByComingSoon")
+    public List<Movie> searchMoviesByComingSoon(@PathVariable LocalDate date) {
+        return movieService.getMovieByComingSoon(date);
+    }
+
+
 
 }
 

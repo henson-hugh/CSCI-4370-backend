@@ -33,4 +33,5 @@ public class Showing {
     @Column(name = "duration")
     private int duration;
 
+
 }
