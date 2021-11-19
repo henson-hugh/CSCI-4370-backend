@@ -30,11 +30,6 @@ public class MovieService {
     @Autowired
     private GenreRepository genreRepository;
 
-    @Autowired
-    private CastMovieRepository castMovieRepository;
-
-    @Autowired
-    private GenreMovieRepository genreMovieRepository;
 
     @Autowired
     private ShowingRepository showingRepository;
@@ -62,28 +57,17 @@ public class MovieService {
         return Optional.empty();
     }
 
-
-    public Optional<Genre> addGenre(String genre) {
+    public Optional<Genre> addGenre(String genre, int mid) {
         Genre g = new Genre();
+        g.setMovieid(mid);
         g.setGenre(genre);
+        // check if overlaps exist
+        Optional<Genre> check = genreRepository.findByGenreAndMovieid(genre, mid);
+        if (check.isPresent()) {
+            return Optional.empty();
+        }
         genreRepository.save(g);
         return Optional.of(g);
-    }
-
-    public Optional<GenreMovie> addGenreMovie(int mid, String genre) {
-        Genre g = genreRepository.findByGenre(genre).get();
-        GenreMovie gm = new GenreMovie();
-        gm.setGenreid(g.getGid());
-        gm.setMovieid(mid);
-        // check if association exists
-        List<GenreMovie> gmes = genreMovieRepository.findByMovieid(mid);
-        for (GenreMovie gme : gmes) {
-            if (gme.getGenreid() == g.getGid()) {
-                return Optional.empty();
-            }
-        }
-        genreMovieRepository.save(gm);
-        return Optional.of(gm);
     }
 
     //Cast
@@ -95,27 +79,17 @@ public class MovieService {
         return Optional.empty();
     }
 
-    public Optional<Cast> addCast(String name) {
+    public Optional<Cast> addCast(String name, int mid) {
         Cast c = new Cast();
+        c.setMovieid(mid);
         c.setName(name);
+        // check if overlaps exist
+        Optional<Cast> check = castRepository.findByNameAndMovieid(name, mid);
+        if (check.isPresent()) {
+            return Optional.empty();
+        }
         castRepository.save(c);
         return Optional.of(c);
-    }
-
-    public Optional<CastMovie> addCastMovie(int mid, String name) {
-        Cast c = castRepository.findByName(name).get();
-        CastMovie cm = new CastMovie();
-        cm.setCastid(c.getCaid());
-        cm.setMovieid(mid);
-        // check if associations exist
-        List<CastMovie> cmes = castMovieRepository.findByMovieid(mid);
-        for (CastMovie cme : cmes) {
-            if (cme.getCastid() == c.getCaid()) {
-                return Optional.empty();
-            }
-        }
-        castMovieRepository.save(cm);
-        return Optional.of(cm);
     }
 
     public List<Movie> getMovieByGenre(String genre) {
@@ -150,5 +124,4 @@ public class MovieService {
         }
         return movies;
     }
-
 }

@@ -17,6 +17,9 @@ public class Cast {
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private int caid;
 
+    @Column(name= "movieid")
+    private int movieid;
+
     @Column(name= "name")
     private String name;
 }
