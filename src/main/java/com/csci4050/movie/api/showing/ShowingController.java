@@ -1,11 +1,13 @@
 package com.csci4050.movie.api.showing;
 
-import com.csci4050.movie.api.model.Customer;
+import com.csci4050.movie.api.model.Movie;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
+import com.csci4050.movie.api.movie.MovieService;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/showing")
@@ -13,19 +15,35 @@ public class ShowingController {
     @Autowired
     private ShowingService showingService;
 
-    // Get movies playing now
+    @Autowired
+    private MovieService movieService;
 
-    // Get movies coming soon
+    @RequestMapping("/searchMovieByGenre")
+    public List<Movie> searchMoviesByGenre(@PathVariable String genre) {
+        return movieService.getMovieByGenre(genre);
+    }
+    @RequestMapping("/searchMovieByDirector")
+    public List<Movie> searchMoviesByDirector(@PathVariable String director) {
+        return movieService.getMovieByDirector(director);
+    }
+    @RequestMapping("/searchMovieByProducer")
+    public List<Movie> searchMoviesByProducer(@PathVariable String producer) {
+        return movieService.getMovieByProducer(producer);
+    }
+    @RequestMapping("/searchMovieByCast")
+    public List<Movie> searchMoviesByCast(@PathVariable String Cast) {
+        return movieService.getMovieByCast(Cast);
+    }
+    @RequestMapping("/searchMovieByCategory")
+    public List<Movie> searchMoviesByCategory(@PathVariable String Category) {
+        return movieService.getMovieByCategory(Category);
+    }
 
-    // Get movies by category
+    @RequestMapping("/searchMovieByDate")
+    public List<Movie> searchMoviesByDate(@PathVariable LocalDate date) {
+        return movieService.getMovieByDate(date);
+    }
 
-    // Get movies by director
-
-    // Get movies by producer
-
-    // Get movies by cast
-
-    // Get movies by genre
-
-    // Get movies by
 }
+
+

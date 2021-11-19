@@ -5,6 +5,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 @Entity
 @Data
@@ -23,10 +25,10 @@ public class Showing {
     private int roomid;
 
     @Column(name = "time")
-    private int time;
+    private LocalTime time;
 
     @Column(name = "date")
-    private String date;
+    private LocalDate date;
 
     @Column(name = "duration")
     private int duration;
