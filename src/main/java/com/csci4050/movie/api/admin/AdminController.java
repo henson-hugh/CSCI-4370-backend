@@ -88,14 +88,8 @@ public class AdminController {
 
         genre = genre.toLowerCase(Locale.ROOT);
 
-        Optional<String> exist = movieService.getGenreByGenre(genre);
-        // check if genre exists
-        if (!exist.isPresent()) {
-            movieService.addGenre(genre); // add genre to list
-        }
-
-        // add genre-movie association if it doesnt already exist
-        if (movieService.addGenreMovie(mid, genre).isPresent()) {
+        // add genre-movie association if the association doesn't exist
+        if (movieService.addGenre(genre, mid).isPresent()) {
             return ResponseEntity.status(HttpStatus.ACCEPTED).body(genre);
         }
 
@@ -105,18 +99,14 @@ public class AdminController {
     // Add Casts to movie
     @PostMapping(value = "/movie/{id}/addCast")
     @CrossOrigin(origins = "http://localhost:4200")
-    public ResponseEntity<String> addCasts(@PathVariable("id") int caid, @RequestBody String name) {
+    public ResponseEntity<String> addCasts(@PathVariable("id") int mid, @RequestBody String name) {
 
         name = name.toLowerCase(Locale.ROOT);
 
-        Optional<String> exist = movieService.getCastByName(name);
-        // check if cast exists
-        if (!exist.isPresent()) {
-            movieService.addCast(name); // add cast to list
+        // add genre-movie association if the association doesn't exist
+        if (movieService.addCast(name, mid).isPresent()) {
+            return ResponseEntity.status(HttpStatus.ACCEPTED).body(name);
         }
-
-        // add cast-movie association
-        movieService.addCastMovie(caid, name);
 
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(name);
     }

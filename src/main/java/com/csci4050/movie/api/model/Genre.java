@@ -17,6 +17,9 @@ public class Genre {
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private int gid;
 
+    @Column(name= "movieid")
+    private int movieid;
+
     @Column(name= "genre")
     private String genre;
 }
