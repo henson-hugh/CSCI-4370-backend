@@ -131,7 +131,7 @@ public class MovieService {
         LocalDate today = LocalDate.now();
 
         for (Showing showing : showingList) {
-            if(today.compareTo(showing.getDate()) <= 0 && showing.getDate().compareTo(today.plusWeeks(2)) > 0 ){
+            if (today.compareTo(showing.getDate()) <= 0 && showing.getDate().compareTo(today.plusWeeks(2)) > 0) {
                 movies.add(movieRepository.findById(showing.getMovieid()).get());
             }
         }
@@ -143,26 +143,38 @@ public class MovieService {
         List<Movie> movies = new ArrayList<Movie>();
         LocalDate today = LocalDate.now();
         for (Showing showing : soonList) {
-            if(showing.getDate().compareTo(today.plusWeeks(2)) <= 0 ){
+            if (showing.getDate().compareTo(today.plusWeeks(2)) <= 0) {
                 movies.add(movieRepository.findById(showing.getMovieid()).get());
             }
         }
         return movies;
     }
 
-    public List<Movie> getAllMovies(){
+    public List<Movie> getMovieByDate(LocalDate date) {
+        List<Showing> soonList = new ArrayList<Showing>(showingRepository.findAllByDate(date));
+        List<Movie> movies = new ArrayList<Movie>();
+        LocalDate today = LocalDate.now();
+        for (Showing showing : soonList) {
+            movies.add(movieRepository.findById(showing.getMovieid()).get());
+        }
+        return movies;
+    }
+
+    public List<Movie> getAllMovies() {
         return movieRepository.findAll();
     }
 
     public List<Genre> getGenreByMovieid(int mid) {
         return genreRepository.findAllByMovieid(mid);
     }
+}
 
-    //public List<Movie> getAll(){
+/*
+//public List<Movie> getAll(){
       //  return
     //}
 
-    /*
+
     public List<Movie> getMovieByCast(String cast) {
 
         //Get all movies
@@ -193,3 +205,4 @@ public class MovieService {
     }
 
 }
+*/

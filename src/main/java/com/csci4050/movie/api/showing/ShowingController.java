@@ -114,6 +114,12 @@ public class ShowingController {
         return movieService.getMovieByComingSoon(date);
     }
 
+    @RequestMapping("/searchMoviesByDate")
+    @CrossOrigin(origins = "http://localhost:4200")
+    public List<Movie> searchMoviesByDate(@PathVariable LocalDate date) {
+        return movieService.getMovieByDate(date);
+    }
+
 
 
 }
