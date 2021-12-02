@@ -9,4 +9,6 @@ public class BookingDto {
 
     private int customerId;
 
+    private String creditCard;
+
 }

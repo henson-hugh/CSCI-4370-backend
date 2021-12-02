@@ -20,5 +20,8 @@ public class Booking {
     @Column(name = "customerId")
     private int customerId;
 
+    @Column(name = "creditCard")
+    private String creditCard;
+
 
 }
