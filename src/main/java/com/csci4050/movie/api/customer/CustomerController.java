@@ -1,10 +1,11 @@
 package com.csci4050.movie.api.customer;
 
 import com.csci4050.movie.api.EmailSenderService;
+import com.csci4050.movie.api.MovieCard;
 import com.csci4050.movie.api.customer.CustomerService;
-import com.csci4050.movie.api.model.Customer;
-import com.csci4050.movie.api.model.User;
-import com.csci4050.movie.api.model.Verification;
+import com.csci4050.movie.api.model.*;
+import com.csci4050.movie.api.paymentCard.PaymentCardDto;
+import com.csci4050.movie.api.paymentCard.PaymentCardService;
 import com.csci4050.movie.api.user.UserDto;
 import com.csci4050.movie.api.user.UserService;
 import com.csci4050.movie.api.verification.VerificationService;
@@ -17,10 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import java.net.URI;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @RestController
@@ -31,6 +29,9 @@ public class CustomerController {
 
     @Autowired
     private EmailSenderService emailService;
+
+    @Autowired
+    private PaymentCardService paymentCardService;
 
     @Autowired
     private ModelMapper modelMapper;
@@ -110,5 +111,29 @@ public class CustomerController {
         customerService.updateCustomer(customer.getCid(), customer);
         //emailService.sendEditEmail(customer);
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(customerdto);
+    }
+
+    @PostMapping(value = "/payment/add")
+    @CrossOrigin(origins = "http://localhost:4200")
+    public ResponseEntity<PaymentCardDto> addPaymentCard(@RequestBody PaymentCardDto paymentCardDto) {
+        PaymentCard paymentCard = modelMapper.map(paymentCardDto, PaymentCard.class);
+        paymentCardService.savePaymentCard(paymentCard);
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(paymentCardDto);
+    }
+
+    @PostMapping(value = "/payment/retrieve")
+    @CrossOrigin(origins = "http://localhost:4200")
+    public ResponseEntity<Object> getPaymentCards(@RequestBody CustomerDto customerdto) {
+        Customer customer = modelMapper.map(customerdto, Customer.class);
+        List<PaymentCard> paymentCards = paymentCardService.getAllPaymentCards(customer);
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(paymentCards);
+    }
+
+    @PostMapping(value = "/payment/edit")
+    @CrossOrigin(origins = "http://localhost:4200")
+    public ResponseEntity<PaymentCardDto> editPaymentCard(@RequestBody PaymentCardDto paymentCardDto) {
+        PaymentCard paymentCard = modelMapper.map(paymentCardDto, PaymentCard.class);
+        paymentCardService.editPaymentCard(paymentCard);
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(paymentCardDto);
     }
 }
