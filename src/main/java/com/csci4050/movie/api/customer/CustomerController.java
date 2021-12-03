@@ -167,13 +167,13 @@ public class CustomerController {
         Customer customer = modelMapper.map(customerDto, Customer.class);
         return bookingService.getBookingHistory(customer);
     }
-/*
-    @PostMapping(value = "/saveBooking")
+
+    @PostMapping(value = "/booking/save")
     @CrossOrigin(origins = "http://localhost:4200")
     ResponseEntity<BookingDto> saveBooking(@RequestBody BookingDto bookingDto) {
         Booking booking = modelMapper.map(bookingDto, Booking.class);
         customerService.saveBooking(booking);
-
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(modelMapper.map(booking, BookingDto.class));
     }
-    */
+
 }
