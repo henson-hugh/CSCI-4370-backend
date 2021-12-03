@@ -155,4 +155,5 @@ public class CustomerController {
     List<Booking> bookingHistory(@RequestBody CustomerDto customerDto) {
         Customer customer = modelMapper.map(customerDto, Customer.class);
         return bookingService.getBookingHistory(customer);
+    }
 }

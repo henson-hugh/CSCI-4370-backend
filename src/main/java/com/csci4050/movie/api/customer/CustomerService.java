@@ -99,19 +99,27 @@ public class CustomerService {
 
     public Optional<Customer> editCustomer(int cid, Customer customer) {
         Customer updatedCustomer = customer;
+        updatedCustomer.setCid(cid);
+        updatedCustomer.setUserid(customerRepository.findById(cid).get().getUserid());
         updatedCustomer.setFirstName(customer.getFirstName());
         updatedCustomer.setLastName(customer.getLastName());
         updatedCustomer.setPhone(customer.getPhone());
-        updatedCustomer.setStreet(customer.getStreet());
-        updatedCustomer.setCity(customer.getCity());
-        updatedCustomer.setState(customer.getState());
-        updatedCustomer.setZip(customer.getZip());
+        if (customer.getStreet() != null) {
+            updatedCustomer.setStreet(customer.getStreet());
+        }
+        if (customer.getCity() != null) {
+            updatedCustomer.setCity(customer.getCity());
+        }
+        if (customer.getState() != null) {
+            updatedCustomer.setState(customer.getState());
+        }
+        if (customer.getZip() != null) {
+            updatedCustomer.setZip(customer.getZip());
+        }
         updatedCustomer.setActive(customer.isActive());
         updatedCustomer.setVerified(customer.isVerified());
         updatedCustomer.setGetPromo(customer.isGetPromo());
-        updatedCustomer.setSuspend(customer.isSuspend());
         return Optional.of(customerRepository.save(updatedCustomer));
-
     }
 
 
