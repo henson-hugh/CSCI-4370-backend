@@ -86,7 +86,6 @@ public class AdminController {
         // check if movie exists
         Optional<Movie> movieExist = movieService.getMovieByTitle(movie.getTitle());
         if (movieExist.isPresent()) {
-            System.out.println(movie.getTitle());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(modelMapper.map(movieExist.get(), MovieDto.class));
         }
 
