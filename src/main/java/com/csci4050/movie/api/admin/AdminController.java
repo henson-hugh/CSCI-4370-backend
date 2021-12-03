@@ -206,6 +206,21 @@ public class AdminController {
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(promotionDto);
     }
 
+    @PostMapping(value = "/customer/get/{id}")
+    @CrossOrigin(origins = "http://localhost:4200")
+    public ResponseEntity<Object> suspendUser(@PathVariable("id") int uid) {
+        Optional<Customer> customerExist = customerService.getCustomerByUserid(uid);
+        if (customerExist.isPresent()) {
+            User user = userService.getUserById(uid).get();
+            Map<String, Object> map = new HashMap<String, Object>();
+
+            map.put("user", user);
+            map.put("customer", customerExist.get());
+            return new ResponseEntity<Object>(map, HttpStatus.ACCEPTED);
+        }
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(uid);
+    }
+
     // Suspend a user
     @PostMapping(value = "/customer/suspend")
     @CrossOrigin(origins = "http://localhost:4200")
