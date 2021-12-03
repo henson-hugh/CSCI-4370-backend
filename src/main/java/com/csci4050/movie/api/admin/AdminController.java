@@ -6,6 +6,8 @@ import com.csci4050.movie.api.customer.CustomerService;
 import com.csci4050.movie.api.model.*;
 import com.csci4050.movie.api.movie.MovieDto;
 import com.csci4050.movie.api.movie.MovieService;
+import com.csci4050.movie.api.price.PriceDto;
+import com.csci4050.movie.api.price.PriceService;
 import com.csci4050.movie.api.promotion.PromotionDto;
 import com.csci4050.movie.api.promotion.PromotionService;
 import com.csci4050.movie.api.showing.ShowingDto;
@@ -53,6 +55,9 @@ public class AdminController {
 
     @Autowired
     private AdminRepository adminRepository;
+
+    @Autowired
+    private PriceService priceService;
 
 
 
@@ -246,6 +251,14 @@ public class AdminController {
         admin.setUserid(user.getUid());
         adminRepository.save(admin);
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(modelMapper.map(admin, AdminDto.class));
+    }
+
+    @PostMapping(value = "/price/edit")
+    @CrossOrigin(origins = "http://localhost:4200")
+    public ResponseEntity<PriceDto> editTicket(@RequestBody PriceDto priceDto) {
+        Price price = modelMapper.map(priceDto, Price.class);
+        priceService.editPrice(price);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(priceDto);
     }
 
 
