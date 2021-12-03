@@ -3,13 +3,13 @@ package com.csci4050.movie.api.customer;
 import com.csci4050.movie.api.booking.BookingRepository;
 import com.csci4050.movie.api.model.Booking;
 import com.csci4050.movie.api.model.Customer;
-import com.csci4050.movie.api.model.PaymentCard;
+import com.csci4050.movie.api.model.Ticket;
+import com.csci4050.movie.api.ticket.TicketRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,6 +27,9 @@ public class CustomerService {
 
     @Autowired
     private BookingRepository bookingRepository;
+
+    @Autowired
+    private TicketRepository ticketRepository;
 
     public Optional<Customer> getCustomerById(int id) {
         return customerRepository.findById(id);
@@ -135,5 +138,16 @@ public class CustomerService {
         updatedBooking.setCreditid(booking.getCreditid());
         updatedBooking.setPromotionid(booking.getPromotionid());
         return Optional.of(bookingRepository.save(updatedBooking));
+    }
+
+    public Optional<Ticket> saveTicket(Ticket ticket) {
+        Ticket newTicket = ticket;
+        newTicket.setTid(ticket.getTid());
+        newTicket.setBookingId(ticket.getBookingId());
+        newTicket.setType(ticket.getType());
+        newTicket.setPrice(ticket.getPrice());
+        newTicket.setSeatId(ticket.getSeatId());
+        return Optional.of(ticketRepository.save(newTicket));
+
     }
 }

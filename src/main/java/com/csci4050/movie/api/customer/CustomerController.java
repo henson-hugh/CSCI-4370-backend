@@ -14,6 +14,7 @@ import com.csci4050.movie.api.model.Customer;
 import com.csci4050.movie.api.model.User;
 import com.csci4050.movie.api.model.Verification;
 import com.csci4050.movie.api.showing.ShowingDto;
+import com.csci4050.movie.api.ticket.TicketDto;
 import com.csci4050.movie.api.user.UserDto;
 import com.csci4050.movie.api.user.UserService;
 import com.csci4050.movie.api.verification.VerificationService;
@@ -176,4 +177,12 @@ public class CustomerController {
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(modelMapper.map(booking, BookingDto.class));
     }
 
+    @PostMapping(value = "/ticket/save")
+    @CrossOrigin(origins = "http://localhost:4200")
+    ResponseEntity<TicketDto> saveTicket(@RequestBody TicketDto ticketDto) {
+        Ticket ticket = modelMapper.map(ticketDto, Ticket.class);
+        customerService.saveTicket(ticket);
+        //emailService.sendBookingEmail(Showing showing, User user);
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(modelMapper.map(ticket, TicketDto.class));
+    }
 }
