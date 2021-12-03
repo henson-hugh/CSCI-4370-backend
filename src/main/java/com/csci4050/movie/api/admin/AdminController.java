@@ -195,6 +195,7 @@ public class AdminController {
 
         promotionService.addPromotion(promotion);
 
+
         // find all users with promotions
         List<Customer> customers = customerService.getAllCustomersWithPromo();
         for (Customer c : customers) {
