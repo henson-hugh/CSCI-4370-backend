@@ -1,8 +1,7 @@
 package com.csci4050.movie.api;
 
-import com.csci4050.movie.api.model.Customer;
-import com.csci4050.movie.api.model.Promotion;
-import com.csci4050.movie.api.model.User;
+import com.csci4050.movie.api.model.*;
+import com.csci4050.movie.api.showing.ShowingController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -20,6 +19,7 @@ public class EmailSenderService {
     @Autowired
     private JavaMailSender mailSender;
 
+    ShowingController showingController;
     public void sendRegistrationEmail(Customer customer, String toEmail, String code){
 
         SimpleMailMessage message = new SimpleMailMessage();
@@ -82,10 +82,26 @@ public class EmailSenderService {
     public void sendPromoEmail(Promotion promo, User user) {
         SimpleMailMessage message = new SimpleMailMessage();
 
-        String body = "New promotion! \nUse code: " + promo.getPcode()
-                + "\nTo get " + (int)Math.round((1 - promo.getDiscount()) * 100) + "% off on your next purchase!";
+        String body = "New promotion! \nPromotion code: " + promo.getPcode()
+                + "\nAvailable until: " + promo.getEndDate().toString()
+                + "\nDiscount: " + (int)Math.round((1 - promo.getDiscount()) * 100) + "% off on your next purchase"
+                + "\nDescription: " + promo.getDescription();
         String subject = "New Promotions!";
 
+        message.setFrom("pidgeontheatres@gmail.com");
+        message.setText(body);
+        message.setSubject(subject);
+        message.setTo(user.getEmail());
+        mailSender.send(message);
+    }
+
+    public void sendBookingEmail(Showing showing, User user){
+        SimpleMailMessage message = new SimpleMailMessage();
+        Movie movie = showingController.searchMoviesById(showing.getSid()).get();
+        String movieTitle = movie.getTitle();
+        String body = "You have sucessfully created a new booking to see "
+                + movieTitle + "at " + showing.getTime() +"on " + showing.getDate();
+        String subject = "New Booking!";
         message.setFrom("pidgeontheatres@gmail.com");
         message.setText(body);
         message.setSubject(subject);

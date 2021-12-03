@@ -17,7 +17,9 @@ public class PromotionService {
 
     public Optional<Promotion> addPromotion(Promotion promotion) {
         Promotion newPromo = promotion;
-        newPromo.setPcode(codeGenerator.generatePromo());
+        if (newPromo.getPcode().isEmpty()) {
+            newPromo.setPcode(codeGenerator.generatePromo());
+        }
         return Optional.of(promotionRepository.save(newPromo));
     }
 }

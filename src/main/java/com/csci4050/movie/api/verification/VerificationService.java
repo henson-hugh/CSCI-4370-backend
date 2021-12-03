@@ -33,7 +33,7 @@ public class VerificationService {
     }
 
     public void verifyCustomer(int cid) {
-        Optional<Verification> verifEntity = verificationRepository.findById(cid);
+        Optional<Verification> verifEntity = verificationRepository.findBycustomerid(cid);
         Verification verification = verifEntity.get();
 
         // remove entity from database

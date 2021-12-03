@@ -10,6 +10,7 @@ import com.csci4050.movie.api.promotion.PromotionDto;
 import com.csci4050.movie.api.promotion.PromotionService;
 import com.csci4050.movie.api.showing.ShowingDto;
 import com.csci4050.movie.api.showing.ShowingService;
+import com.csci4050.movie.api.user.UserDto;
 import com.csci4050.movie.api.user.UserService;
 import org.apache.coyote.Response;
 import org.modelmapper.ModelMapper;
@@ -49,6 +50,11 @@ public class AdminController {
     @Autowired
     private EmailSenderService emailSenderService;
 
+    @Autowired
+    private AdminRepository adminRepository;
+
+
+
     @PostMapping("/movie/id/{id}")
     @CrossOrigin(origins = "http://localhost:4200")
     public ResponseEntity<Object> searchMoviesById(@PathVariable int id) {
@@ -79,7 +85,6 @@ public class AdminController {
         // check if movie exists
         Optional<Movie> movieExist = movieService.getMovieByTitle(movie.getTitle());
         if (movieExist.isPresent()) {
-            System.out.println(movie.getTitle());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(modelMapper.map(movieExist.get(), MovieDto.class));
         }
 
@@ -190,6 +195,7 @@ public class AdminController {
 
         promotionService.addPromotion(promotion);
 
+
         // find all users with promotions
         List<Customer> customers = customerService.getAllCustomersWithPromo();
         for (Customer c : customers) {
@@ -232,6 +238,13 @@ public class AdminController {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(customerDto);
     }
 
-
-
+    @PostMapping(value = "/admin/create")
+    @CrossOrigin(origins = "http://localhost:4200")
+    public ResponseEntity<AdminDto> addAdmin(@RequestBody UserDto userDto) {
+        User user = modelMapper.map(userDto, User.class);
+        Admin admin = new Admin();
+        admin.setUserid(user.getUid());
+        adminRepository.save(admin);
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(modelMapper.map(admin, AdminDto.class));
+    }
 }

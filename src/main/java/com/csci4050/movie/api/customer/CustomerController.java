@@ -6,6 +6,10 @@ import com.csci4050.movie.api.customer.CustomerService;
 import com.csci4050.movie.api.model.*;
 import com.csci4050.movie.api.paymentCard.PaymentCardDto;
 import com.csci4050.movie.api.paymentCard.PaymentCardService;
+import com.csci4050.movie.api.model.Customer;
+import com.csci4050.movie.api.model.User;
+import com.csci4050.movie.api.model.Verification;
+import com.csci4050.movie.api.showing.ShowingDto;
 import com.csci4050.movie.api.user.UserDto;
 import com.csci4050.movie.api.user.UserService;
 import com.csci4050.movie.api.verification.VerificationService;
@@ -82,6 +86,8 @@ public class CustomerController {
         if (verification.isPresent()) { // checks if verification matches
             customerService.verifyCustomer(customer.getCid());
 
+            System.out.println("cid" + cid);
+
             // remove vcode from repository
             verificationService.verifyCustomer(cid);
 
@@ -110,7 +116,7 @@ public class CustomerController {
         Customer customer = modelMapper.map(customerdto, Customer.class);
         customerService.updateCustomer(customer.getCid(), customer);
         //emailService.sendEditEmail(customer);
-        return ResponseEntity.status(HttpStatus.ACCEPTED).body(customerdto);
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(modelMapper.map(customer, CustomerDto.class));
     }
 
     @PostMapping(value = "/payment/add")

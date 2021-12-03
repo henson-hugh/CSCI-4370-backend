@@ -165,6 +165,7 @@ public class UserController {
 
         // check if user exists
         if (userService.getUserById(user.getUid()).isPresent()) {
+            user.setEmail(userService.getUserById(user.getUid()).get().getEmail());
             userService.saveUser(user);
             return ResponseEntity.status(HttpStatus.ACCEPTED).body(modelMapper.map(user, UserDto.class));
         } else {
