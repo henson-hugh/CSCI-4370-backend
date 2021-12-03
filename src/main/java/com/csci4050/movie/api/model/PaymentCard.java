@@ -21,10 +21,10 @@ public class PaymentCard {
     @Column(name = "customerid")
     private int customerid;
 
-    @Column(name = "cardNumber")
-    private int cardNumber;
+    @Column(name = "card_number")
+    private String cardNumber;
 
-    @Column(name = "expDate")
+    @Column(name = "exp_date")
     private LocalDate expDate;
 
     @Column(name = "street")

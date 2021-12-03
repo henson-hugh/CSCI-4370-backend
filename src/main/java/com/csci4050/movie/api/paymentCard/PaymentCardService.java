@@ -27,16 +27,6 @@ public class PaymentCardService {
     }
 
     public Optional<PaymentCard> savePaymentCard(PaymentCard paymentCard) {
-        if (paymentCard.getExpDate().isBefore(LocalDate.now()) || paymentCard.getExpDate().isEqual(LocalDate.now())) {
-            System.out.println("Payment card is expired and cannot be stored");
-            return Optional.empty();
-        } else {
-            return Optional.of(paymentCardRepository.save(paymentCard));
-        }
-
-    }
-
-    public Optional<PaymentCard> editPaymentCard(PaymentCard paymentCard) {
         Optional<PaymentCard> exist = paymentCardRepository.findById(paymentCard.getPcid());
         if (paymentCard.getExpDate().isBefore(LocalDate.now()) || paymentCard.getExpDate().isEqual(LocalDate.now())) {
             System.out.println("Payment card is expired and cannot be stored");
@@ -52,7 +42,7 @@ public class PaymentCardService {
 
             return Optional.of(paymentCardRepository.save(newPaymentCard));
         } else {
-            return Optional.empty();
+            return Optional.of(paymentCardRepository.save(paymentCard));
         }
     }
 }

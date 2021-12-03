@@ -10,7 +10,7 @@ public class PaymentCardDto {
 
     private int customerid;
 
-    private int cardNumber;
+    private String cardNumber;
 
     private LocalDate expDate;
 

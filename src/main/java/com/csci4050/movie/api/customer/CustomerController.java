@@ -67,7 +67,7 @@ public class CustomerController {
         emailService.sendRegistrationEmail(customer, email, code);
 
         return ResponseEntity.status(HttpStatus.ACCEPTED)
-                .body(customerDto);
+                .body(modelMapper.map(customer, CustomerDto.class));
     }
 
     // Verify Account
@@ -133,7 +133,7 @@ public class CustomerController {
     @CrossOrigin(origins = "http://localhost:4200")
     public ResponseEntity<PaymentCardDto> editPaymentCard(@RequestBody PaymentCardDto paymentCardDto) {
         PaymentCard paymentCard = modelMapper.map(paymentCardDto, PaymentCard.class);
-        paymentCardService.editPaymentCard(paymentCard);
-        return ResponseEntity.status(HttpStatus.ACCEPTED).body(paymentCardDto);
+        paymentCardService.savePaymentCard(paymentCard);
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(modelMapper.map(paymentCard, PaymentCardDto.class));
     }
 }
