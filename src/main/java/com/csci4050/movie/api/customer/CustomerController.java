@@ -1,7 +1,10 @@
 package com.csci4050.movie.api.customer;
 
 import com.csci4050.movie.api.EmailSenderService;
+import com.csci4050.movie.api.booking.BookingDto;
+import com.csci4050.movie.api.booking.BookingService;
 import com.csci4050.movie.api.customer.CustomerService;
+import com.csci4050.movie.api.model.Booking;
 import com.csci4050.movie.api.model.Customer;
 import com.csci4050.movie.api.model.User;
 import com.csci4050.movie.api.model.Verification;
@@ -44,6 +47,9 @@ public class CustomerController {
 
     @Autowired
     private VerificationService verificationService;
+
+    @Autowired
+    private BookingService bookingService;
 
     @GetMapping
     public List<Customer> getAllCustomers() {
@@ -116,4 +122,11 @@ public class CustomerController {
     }
 
 
+    @PostMapping(value = "/booking/history")
+    @CrossOrigin(origins = "http://localhost:4200")
+    List<Booking> bookingHistory(@RequestBody CustomerDto customerDto) {
+        Customer customer = modelMapper.map(customerDto, Customer.class);
+        return bookingService.getBookingHistory(customer);
+
+    }
 }

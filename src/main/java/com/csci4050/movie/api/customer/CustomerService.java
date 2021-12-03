@@ -1,5 +1,6 @@
 package com.csci4050.movie.api.customer;
 
+import com.csci4050.movie.api.model.Booking;
 import com.csci4050.movie.api.model.Customer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -112,4 +113,6 @@ public class CustomerService {
         return Optional.of(customerRepository.save(updatedCustomer));
 
     }
+
+
 }
