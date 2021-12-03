@@ -13,8 +13,6 @@ public interface MovieRepository extends CrudRepository<Movie, Integer> {
     Optional<Movie> findByTitle(String title);
     List<Movie> findAllByDirector(String director);
     List<Movie> findAllByProducer(String producer);
-    //List<Movie>
-    //List<Movie> findAllByCast(String cast);  // needs to be changed into the CAST dto
-
-
+    List<Movie> findAllByTitle(String title);
+    List<Movie> findAllByRating(String rating);
 }
