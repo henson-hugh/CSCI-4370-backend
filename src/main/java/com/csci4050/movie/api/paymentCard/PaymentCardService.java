@@ -26,6 +26,10 @@ public class PaymentCardService {
         return paymentCardRepository.findAllByCustomerid(customer.getCid());
     }
 
+    public Optional<PaymentCard> getPaymentCards(Customer customer) {
+        return paymentCardRepository.findByCustomerid(customer.getCid());
+    }
+
     public Optional<PaymentCard> savePaymentCard(PaymentCard paymentCard) {
         Optional<PaymentCard> exist = paymentCardRepository.findById(paymentCard.getPcid());
         if (paymentCard.getExpDate().isBefore(LocalDate.now()) || paymentCard.getExpDate().isEqual(LocalDate.now())) {

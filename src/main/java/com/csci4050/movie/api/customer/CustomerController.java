@@ -141,6 +141,17 @@ public class CustomerController {
         List<PaymentCard> paymentCards = paymentCardService.getAllPaymentCards(customer);
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(paymentCards);
     }
+
+    @PostMapping(value = "/payment/retrieve/first")
+    @CrossOrigin(origins = "http://localhost:4200")
+    public ResponseEntity<Object> getPaymentCard(@RequestBody CustomerDto customerdto) {
+        Customer customer = modelMapper.map(customerdto, Customer.class);
+        Optional<PaymentCard> paymentCard = paymentCardService.getPaymentCards(customer);
+        if (paymentCard.isPresent()) {
+            return ResponseEntity.status(HttpStatus.ACCEPTED).body(paymentCard);
+        }
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(paymentCard);
+    }
   
     @PostMapping(value = "/payment/edit")
     @CrossOrigin(origins = "http://localhost:4200")
