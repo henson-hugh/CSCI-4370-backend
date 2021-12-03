@@ -67,7 +67,7 @@ public class CustomerController {
         emailService.sendRegistrationEmail(customer, email, code);
 
         return ResponseEntity.status(HttpStatus.ACCEPTED)
-                .body(customerDto);
+                .body(modelMapper.map(customer, CustomerDto.class));
     }
 
     // Verify Account
@@ -81,6 +81,8 @@ public class CustomerController {
         Optional<Verification> verification = verificationService.getVerificationByCode(vcode);
         if (verification.isPresent()) { // checks if verification matches
             customerService.verifyCustomer(customer.getCid());
+
+            System.out.println("cid" + cid);
 
             // remove vcode from repository
             verificationService.verifyCustomer(cid);
@@ -110,7 +112,7 @@ public class CustomerController {
         Customer customer = modelMapper.map(customerdto, Customer.class);
         customerService.updateCustomer(customer.getCid(), customer);
         //emailService.sendEditEmail(customer);
-        return ResponseEntity.status(HttpStatus.ACCEPTED).body(customerdto);
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(modelMapper.map(customer, CustomerDto.class));
     }
 
 

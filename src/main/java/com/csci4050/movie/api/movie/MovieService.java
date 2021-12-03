@@ -176,11 +176,15 @@ public class MovieService {
     }
 
     public List<Movie> getMovieByDate(LocalDate date) {
-        List<Showing> soonList = new ArrayList<Showing>(showingRepository.findAllByDate(date));
+        List<Showing> soonList = new ArrayList<Showing>(showingRepository.findAll());
         List<Movie> movies = new ArrayList<Movie>();
-        LocalDate today = LocalDate.now();
         for (Showing showing : soonList) {
-            movies.add(movieRepository.findById(showing.getMovieid()).get());
+            if (showing.getDate().compareTo(date) == 0) {
+                Movie m = movieRepository.findById(showing.getMovieid()).get();
+                if (!movies.contains(m)) {
+                    movies.add(m);
+                }
+            }
         }
         return movies;
     }
@@ -191,6 +195,10 @@ public class MovieService {
 
     public List<Genre> getGenreByMovieid(int mid) {
         return genreRepository.findAllByMovieid(mid);
+    }
+
+    public List<Cast> getCastByMovieid(int mid) {
+        return castRepository.findAllByMovieid(mid);
     }
 }
 

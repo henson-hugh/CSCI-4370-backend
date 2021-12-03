@@ -9,4 +9,5 @@ import java.util.Optional;
 @Repository
 public interface VerificationRepository extends CrudRepository<Verification, Integer> {
     Optional<Verification> findByVcode(String vcode);
+    Optional<Verification> findBycustomerid(int customerid);
 }

@@ -1,6 +1,7 @@
 package com.csci4050.movie.api.showing;
 
 import com.csci4050.movie.api.MovieCard;
+import com.csci4050.movie.api.model.Cast;
 import com.csci4050.movie.api.model.Genre;
 import com.csci4050.movie.api.model.Movie;
 import com.csci4050.movie.api.model.Showing;
@@ -81,10 +82,12 @@ public class ShowingController {
             if (movieList.get(i) != null) {
                 List<Genre> genres = movieService.getGenreByMovieid(movieList.get(i).getMid());
                 List<Showing> showings = showingService.getShowingsByMovieid(movieList.get(i).getMid());
+                List<Cast> casts = movieService.getCastByMovieid(movieList.get(i).getMid());
                 MovieCard mc = new MovieCard();
                 mc.setMovie(movieList.get(i));
                 mc.setGenres(genres);
                 mc.setShowings(showings);
+                mc.setCasts(casts);
                 movieCard.add(mc);
             }
         }
@@ -102,10 +105,12 @@ public class ShowingController {
             if (movieList.get(i) != null) {
                 List<Genre> genres = movieService.getGenreByMovieid(movieList.get(i).getMid());
                 List<Showing> showings = showingService.getShowingsByMovieid(movieList.get(i).getMid());
+                List<Cast> casts = movieService.getCastByMovieid(movieList.get(i).getMid());
                 MovieCard mc = new MovieCard();
                 mc.setMovie(movieList.get(i));
                 mc.setGenres(genres);
                 mc.setShowings(showings);
+                mc.setCasts(casts);
                 movieCard.add(mc);
             }
         }
@@ -122,10 +127,12 @@ public class ShowingController {
             if (movieList.get(i) != null) {
                 List<Genre> genres = movieService.getGenreByMovieid(movieList.get(i).getMid());
                 List<Showing> showings = showingService.getShowingsByMovieid(movieList.get(i).getMid());
+                List<Cast> casts = movieService.getCastByMovieid(movieList.get(i).getMid());
                 MovieCard mc = new MovieCard();
                 mc.setMovie(movieList.get(i));
                 mc.setGenres(genres);
                 mc.setShowings(showings);
+                mc.setCasts(casts);
                 movieCard.add(mc);
             }
         }
@@ -143,10 +150,12 @@ public class ShowingController {
             if (movieList.get(i) != null) {
                 List<Genre> genres = movieService.getGenreByMovieid(movieList.get(i).getMid());
                 List<Showing> showings = showingService.getShowingsByMovieid(movieList.get(i).getMid());
+                List<Cast> casts = movieService.getCastByMovieid(movieList.get(i).getMid());
                 MovieCard mc = new MovieCard();
                 mc.setMovie(movieList.get(i));
                 mc.setGenres(genres);
                 mc.setShowings(showings);
+                mc.setCasts(casts);
                 movieCard.add(mc);
             }
         }
@@ -164,10 +173,12 @@ public class ShowingController {
             if (movieList.get(i) != null) {
                 List<Genre> genres = movieService.getGenreByMovieid(movieList.get(i).getMid());
                 List<Showing> showings = showingService.getShowingsByMovieid(movieList.get(i).getMid());
+                List<Cast> casts = movieService.getCastByMovieid(movieList.get(i).getMid());
                 MovieCard mc = new MovieCard();
                 mc.setMovie(movieList.get(i));
                 mc.setGenres(genres);
                 mc.setShowings(showings);
+                mc.setCasts(casts);
                 movieCard.add(mc);
             }
         }
@@ -185,10 +196,37 @@ public class ShowingController {
             if (movieList.get(i) != null) {
                 List<Genre> genres = movieService.getGenreByMovieid(movieList.get(i).getMid());
                 List<Showing> showings = showingService.getShowingsByMovieid(movieList.get(i).getMid());
+                List<Cast> casts = movieService.getCastByMovieid(movieList.get(i).getMid());
                 MovieCard mc = new MovieCard();
                 mc.setMovie(movieList.get(i));
                 mc.setGenres(genres);
                 mc.setShowings(showings);
+                mc.setCasts(casts);
+                movieCard.add(mc);
+            }
+        }
+        map.put("movies", movieCard);
+        return new ResponseEntity<Object>(map, HttpStatus.ACCEPTED);
+    }
+
+    @RequestMapping("/search/date")
+    @CrossOrigin(origins = "http://localhost:4200")
+    public ResponseEntity<Object> searchMoviesByDate(@RequestBody String dateString) {
+        LocalDate date = LocalDate.parse(dateString);
+
+        List<Movie> movieList = movieService.getMovieByDate(date);
+        Map<String, Object> map = new HashMap<String, Object>();
+        List<MovieCard> movieCard = new ArrayList<MovieCard>();
+        for (int i = 0; i < movieList.size(); i++) {
+            if (movieList.get(i) != null) {
+                List<Genre> genres = movieService.getGenreByMovieid(movieList.get(i).getMid());
+                List<Showing> showings = showingService.getShowingsByMovieid(movieList.get(i).getMid());
+                List<Cast> casts = movieService.getCastByMovieid(movieList.get(i).getMid());
+                MovieCard mc = new MovieCard();
+                mc.setMovie(movieList.get(i));
+                mc.setGenres(genres);
+                mc.setShowings(showings);
+                mc.setCasts(casts);
                 movieCard.add(mc);
             }
         }
@@ -254,14 +292,6 @@ public class ShowingController {
         map.put("movies", movieCard);
         return new ResponseEntity<Object>(map, HttpStatus.ACCEPTED);
     }
-
-    @RequestMapping("/searchMoviesByDate")
-    @CrossOrigin(origins = "http://localhost:4200")
-    public List<Movie> searchMoviesByDate(@PathVariable LocalDate date) {
-        return movieService.getMovieByDate(date);
-    }
-
-
 
 }
 

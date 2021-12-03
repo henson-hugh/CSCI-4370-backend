@@ -17,11 +17,14 @@ public class Booking {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int bid;
 
-    @Column(name = "customerId")
-    private int customerId;
+    @Column(name = "customerid")
+    private int customerid;
 
-    @Column(name = "creditCard")
-    private String creditCard;
+    @Column(name = "creditid")
+    private int creditid;
+
+    @Column(name = "promotionid")
+    private int promotionid;
 
 
 }
