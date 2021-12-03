@@ -6,10 +6,13 @@ import com.csci4050.movie.api.customer.CustomerService;
 import com.csci4050.movie.api.model.*;
 import com.csci4050.movie.api.movie.MovieDto;
 import com.csci4050.movie.api.movie.MovieService;
+import com.csci4050.movie.api.price.PriceDto;
+import com.csci4050.movie.api.price.PriceService;
 import com.csci4050.movie.api.promotion.PromotionDto;
 import com.csci4050.movie.api.promotion.PromotionService;
 import com.csci4050.movie.api.showing.ShowingDto;
 import com.csci4050.movie.api.showing.ShowingService;
+import com.csci4050.movie.api.ticket.TicketDto;
 import com.csci4050.movie.api.user.UserDto;
 import com.csci4050.movie.api.user.UserService;
 import org.apache.coyote.Response;
@@ -52,6 +55,11 @@ public class AdminController {
 
     @Autowired
     private AdminRepository adminRepository;
+
+    @Autowired
+    private PriceService priceService;
+
+
 
 
 
@@ -206,6 +214,32 @@ public class AdminController {
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(promotionDto);
     }
 
+
+    // Edit a User
+    @PostMapping(value = "/user/edit")
+    @CrossOrigin(origins = "http://localhost:4200")
+    public ResponseEntity<UserDto> editUser(@RequestBody UserDto userDto) {
+        User user = modelMapper.map(userDto, User.class);
+
+        // check if it exists
+        Optional<User> userExist = userService.getUserById(user.getUid());
+        userService.editUser(user.getUid(), user);
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(modelMapper.map(userExist.get(), UserDto.class));
+    }
+
+
+    // Edit a Customer
+    @PostMapping(value = "/customer/edit")
+    @CrossOrigin(origins = "http://localhost:4200")
+    public ResponseEntity<CustomerDto> editCustomer(@RequestBody CustomerDto customerDto) {
+        Customer customer = modelMapper.map(customerDto, Customer.class);
+
+        // check if it exists
+        Optional<Customer> customerExist = customerService.getCustomerById(customer.getCid());
+        customerService.editCustomer(customer.getCid(), customer);
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(modelMapper.map(customerExist.get(), CustomerDto.class));
+    }
+
     @PostMapping(value = "/customer/get/{id}")
     @CrossOrigin(origins = "http://localhost:4200")
     public ResponseEntity<Object> suspendUser(@PathVariable("id") int uid) {
@@ -238,6 +272,23 @@ public class AdminController {
     }
 
 
+    // unsuspend a user
+    @PostMapping(value = "/customer/unsuspend")
+    @CrossOrigin(origins = "http://localhost:4200")
+    public ResponseEntity<CustomerDto> unsuspendUser(@RequestBody CustomerDto customerDto) {
+        Customer customer = modelMapper.map(customerDto, Customer.class);
+
+        // check if it exists
+        Optional<Customer> customerExist = customerService.getCustomerById(customer.getCid());
+        if (customerExist.isPresent()) {
+            customerService.suspendCustomer(customer.getCid(), false);
+            return ResponseEntity.status(HttpStatus.ACCEPTED).body(modelMapper.map(customerExist.get(), CustomerDto.class));
+        }
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(customerDto);
+    }
+
+
     // Remove user
     @PostMapping(value = "/customer/remove")
     @CrossOrigin(origins = "http://localhost:4200")
@@ -262,4 +313,14 @@ public class AdminController {
         adminRepository.save(admin);
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(modelMapper.map(admin, AdminDto.class));
     }
+
+    @PostMapping(value = "/price/edit")
+    @CrossOrigin(origins = "http://localhost:4200")
+    public ResponseEntity<PriceDto> editTicket(@RequestBody PriceDto priceDto) {
+        Price price = modelMapper.map(priceDto, Price.class);
+        priceService.editPrice(price);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(priceDto);
+    }
+
+
 }

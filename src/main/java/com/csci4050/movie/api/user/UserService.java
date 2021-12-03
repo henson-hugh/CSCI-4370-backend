@@ -1,6 +1,5 @@
 package com.csci4050.movie.api.user;
 
-import com.csci4050.movie.api.model.Customer;
 import com.csci4050.movie.api.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -44,5 +43,12 @@ public class UserService {
         updateUser.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepository.save(updateUser);
         return Optional.empty();
+    }
+
+    public Optional<User> editUser(int uid, User user) {
+        User updatedUser = user;
+        updatedUser.setEmail(user.getEmail());
+        return Optional.of(userRepository.save(updatedUser));
+
     }
 }
