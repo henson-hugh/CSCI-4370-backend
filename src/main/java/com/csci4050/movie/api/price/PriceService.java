@@ -16,6 +16,7 @@ public class PriceService {
         newPrice.setSTicket(price.getSTicket());
         newPrice.setATicket(price.getATicket());
         newPrice.setCTicket(price.getCTicket());
+        newPrice.setFee(price.getFee());
         return Optional.of(priceRepository.save(newPrice));
     }
 
