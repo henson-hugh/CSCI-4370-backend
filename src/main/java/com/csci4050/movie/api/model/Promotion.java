@@ -24,9 +24,6 @@ public class Promotion {
     @Column(name = "pcode", unique = true)
     private String pcode;
 
-    @Column(name = "startDate")
-    private LocalDate startDate;
-
     @Column(name = "endDate")
     private LocalDate endDate;
 

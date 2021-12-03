@@ -82,8 +82,10 @@ public class EmailSenderService {
     public void sendPromoEmail(Promotion promo, User user) {
         SimpleMailMessage message = new SimpleMailMessage();
 
-        String body = "New promotion! \nUse code: " + promo.getPcode()
-                + "\nTo get " + (int)Math.round((1 - promo.getDiscount()) * 100) + "% off on your next purchase!";
+        String body = "New promotion! \nPromotion code: " + promo.getPcode()
+                + "\nAvailable until: " + promo.getEndDate().toString()
+                + "\nDiscount: " + (int)Math.round((1 - promo.getDiscount()) * 100) + "% off on your next purchase"
+                + "\nDescription: " + promo.getDescription();
         String subject = "New Promotions!";
 
         message.setFrom("pidgeontheatres@gmail.com");

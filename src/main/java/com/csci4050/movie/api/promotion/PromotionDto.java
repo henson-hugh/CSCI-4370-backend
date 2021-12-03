@@ -13,8 +13,6 @@ public class PromotionDto {
 
     private String pcode;
 
-    private LocalDate startDate;
-
     private LocalDate endDate;
 
     private String description;
