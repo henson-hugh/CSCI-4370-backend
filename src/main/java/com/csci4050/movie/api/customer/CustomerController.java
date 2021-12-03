@@ -5,6 +5,7 @@ import com.csci4050.movie.api.customer.CustomerService;
 import com.csci4050.movie.api.model.Customer;
 import com.csci4050.movie.api.model.User;
 import com.csci4050.movie.api.model.Verification;
+import com.csci4050.movie.api.showing.ShowingDto;
 import com.csci4050.movie.api.user.UserDto;
 import com.csci4050.movie.api.user.UserService;
 import com.csci4050.movie.api.verification.VerificationService;
@@ -113,4 +114,6 @@ public class CustomerController {
         //emailService.sendEditEmail(customer);
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(modelMapper.map(customer, CustomerDto.class));
     }
+
+
 }

@@ -50,6 +50,27 @@ public class ShowingController {
         return movieService.getMovieById(id);
     }
 
+    @RequestMapping("/search/all")
+    @CrossOrigin(origins = "http://localhost:4200")
+    public ResponseEntity<Object> searchAllMovies() {
+        List<Movie> movieList = movieService.getAllMovies();
+        Map<String, Object> map = new HashMap<String, Object>();
+        List<MovieCard> movieCard = new ArrayList<MovieCard>();
+        for (int i = 0; i < movieList.size(); i++) {
+            if (movieList.get(i) != null) {
+                List<Genre> genres = movieService.getGenreByMovieid(movieList.get(i).getMid());
+                List<Showing> showings = showingService.getShowingsByMovieid(movieList.get(i).getMid());
+                MovieCard mc = new MovieCard();
+                mc.setMovie(movieList.get(i));
+                mc.setGenres(genres);
+                mc.setShowings(showings);
+                movieCard.add(mc);
+            }
+        }
+        map.put("movies", movieCard);
+        return new ResponseEntity<Object>(map, HttpStatus.ACCEPTED);
+    }
+
     @RequestMapping("/search/genre")
     @CrossOrigin(origins = "http://localhost:4200")
     public ResponseEntity<Object> searchMoviesByGenre(@RequestBody String genre) {
@@ -232,6 +253,12 @@ public class ShowingController {
         }
         map.put("movies", movieCard);
         return new ResponseEntity<Object>(map, HttpStatus.ACCEPTED);
+    }
+
+    @RequestMapping("/searchMoviesByDate")
+    @CrossOrigin(origins = "http://localhost:4200")
+    public List<Movie> searchMoviesByDate(@PathVariable LocalDate date) {
+        return movieService.getMovieByDate(date);
     }
 
 

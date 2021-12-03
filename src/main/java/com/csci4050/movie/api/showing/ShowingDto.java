@@ -1,5 +1,6 @@
 package com.csci4050.movie.api.showing;
 
+import com.csci4050.movie.api.model.Customer;
 import lombok.Data;
 
 import javax.persistence.Column;
@@ -19,4 +20,6 @@ public class ShowingDto {
     private LocalTime time;
 
     private LocalDate date;
+
 }
+
