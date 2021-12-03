@@ -13,6 +13,7 @@ public class PriceService {
 
     public Optional<Price> editPrice(Price price) {
         Price newPrice = price;
+        newPrice.setPid(1);
         newPrice.setSTicket(price.getSTicket());
         newPrice.setATicket(price.getATicket());
         newPrice.setCTicket(price.getCTicket());
