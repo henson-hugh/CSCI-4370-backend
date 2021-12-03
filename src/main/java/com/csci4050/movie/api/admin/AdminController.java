@@ -61,6 +61,8 @@ public class AdminController {
 
 
 
+
+
     @PostMapping("/movie/id/{id}")
     @CrossOrigin(origins = "http://localhost:4200")
     public ResponseEntity<Object> searchMoviesById(@PathVariable int id) {
@@ -211,6 +213,34 @@ public class AdminController {
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(promotionDto);
     }
 
+
+
+    // Edit a User
+    @PostMapping(value = "/user/edit")
+    @CrossOrigin(origins = "http://localhost:4200")
+    public ResponseEntity<UserDto> editUser(@RequestBody UserDto userDto) {
+        User user = modelMapper.map(userDto, User.class);
+
+        // check if it exists
+        Optional<User> userExist = userService.getUserById(user.getUid());
+        userService.editUser(user.getUid(), user);
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(modelMapper.map(userExist.get(), UserDto.class));
+    }
+
+
+    // Edit a Customer
+    @PostMapping(value = "/customer/edit")
+    @CrossOrigin(origins = "http://localhost:4200")
+    public ResponseEntity<CustomerDto> editCustomer(@RequestBody CustomerDto customerDto) {
+        Customer customer = modelMapper.map(customerDto, Customer.class);
+
+        // check if it exists
+        Optional<Customer> customerExist = customerService.getCustomerById(customer.getCid());
+        customerService.editCustomer(customer.getCid(), customer);
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(modelMapper.map(customerExist.get(), CustomerDto.class));
+    }
+
+
     // Suspend a user
     @PostMapping(value = "/customer/suspend")
     @CrossOrigin(origins = "http://localhost:4200")
@@ -221,6 +251,23 @@ public class AdminController {
         Optional<Customer> customerExist = customerService.getCustomerById(customer.getCid());
         if (customerExist.isPresent()) {
             customerService.suspendCustomer(customer.getCid(), true);
+            return ResponseEntity.status(HttpStatus.ACCEPTED).body(modelMapper.map(customerExist.get(), CustomerDto.class));
+        }
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(customerDto);
+    }
+
+
+    // unsuspend a user
+    @PostMapping(value = "/customer/unsuspend")
+    @CrossOrigin(origins = "http://localhost:4200")
+    public ResponseEntity<CustomerDto> unsuspendUser(@RequestBody CustomerDto customerDto) {
+        Customer customer = modelMapper.map(customerDto, Customer.class);
+
+        // check if it exists
+        Optional<Customer> customerExist = customerService.getCustomerById(customer.getCid());
+        if (customerExist.isPresent()) {
+            customerService.suspendCustomer(customer.getCid(), false);
             return ResponseEntity.status(HttpStatus.ACCEPTED).body(modelMapper.map(customerExist.get(), CustomerDto.class));
         }
 

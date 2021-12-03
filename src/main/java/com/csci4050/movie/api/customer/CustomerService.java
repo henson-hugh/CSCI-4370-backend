@@ -1,8 +1,6 @@
 package com.csci4050.movie.api.customer;
 
-import com.csci4050.movie.api.CodeGenerator;
 import com.csci4050.movie.api.model.Customer;
-import com.csci4050.movie.api.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -96,5 +94,22 @@ public class CustomerService {
         Customer customer = customerRepository.findById(cid).get();
         customer.setSuspend(suspend);
         return customerRepository.save(customer);
+    }
+
+    public Optional<Customer> editCustomer(int cid, Customer customer) {
+        Customer updatedCustomer = customer;
+        updatedCustomer.setFirstName(customer.getFirstName());
+        updatedCustomer.setLastName(customer.getLastName());
+        updatedCustomer.setPhone(customer.getPhone());
+        updatedCustomer.setStreet(customer.getStreet());
+        updatedCustomer.setCity(customer.getCity());
+        updatedCustomer.setState(customer.getState());
+        updatedCustomer.setZip(customer.getZip());
+        updatedCustomer.setActive(customer.isActive());
+        updatedCustomer.setVerified(customer.isVerified());
+        updatedCustomer.setGetPromo(customer.isGetPromo());
+        updatedCustomer.setSuspend(customer.isSuspend());
+        return Optional.of(customerRepository.save(updatedCustomer));
+
     }
 }
