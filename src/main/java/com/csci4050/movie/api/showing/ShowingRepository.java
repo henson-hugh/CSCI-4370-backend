@@ -17,4 +17,5 @@ public interface ShowingRepository extends CrudRepository<Showing, Integer> {
     List<Showing> findAll();
 
 
+
 }

@@ -1,6 +1,7 @@
 package com.csci4050.movie.api.admin;
 
 import com.csci4050.movie.api.model.Admin;
+import com.csci4050.movie.api.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,4 +16,5 @@ public class AdminService {
     public Optional<Admin> getAdminByUid(int uid) {
         return adminRepository.findByUserid(uid);
     }
+
 }

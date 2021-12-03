@@ -255,6 +255,12 @@ public class ShowingController {
         return new ResponseEntity<Object>(map, HttpStatus.ACCEPTED);
     }
 
+    @RequestMapping("/searchMoviesByDate")
+    @CrossOrigin(origins = "http://localhost:4200")
+    public List<Movie> searchMoviesByDate(@PathVariable LocalDate date) {
+        return movieService.getMovieByDate(date);
+    }
+
 
 
 }
