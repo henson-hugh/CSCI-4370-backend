@@ -16,14 +16,14 @@ public class Price {
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private int pid;
 
-    @Column(name= "aTicket")
-    private int aTicket;
+    @Column(name= "aticket")
+    private int aticket;
 
-    @Column(name= "cTicket")
-    private int cTicket;
+    @Column(name= "cticket")
+    private int cticket;
 
-    @Column(name= "sTicket")
-    private int sTicket;
+    @Column(name= "sticket")
+    private int sticket;
 
     @Column(name= "fee")
     private int fee;

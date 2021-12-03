@@ -7,11 +7,11 @@ public class PriceDto {
 
     private int pid;
 
-    private int aTicket;
+    private int aticket;
 
-    private int cTicket;
+    private int cticket;
 
-    private int sTicket;
+    private int sticket;
 
     private int fee;
 }

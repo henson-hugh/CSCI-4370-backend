@@ -14,11 +14,26 @@ public class PriceService {
     public Optional<Price> editPrice(Price price) {
         Price newPrice = price;
         newPrice.setPid(1);
-        newPrice.setSTicket(price.getSTicket());
-        newPrice.setATicket(price.getATicket());
-        newPrice.setCTicket(price.getCTicket());
+        newPrice.setSticket(price.getSticket());
+        newPrice.setAticket(price.getAticket());
+        newPrice.setCticket(price.getCticket());
         newPrice.setFee(price.getFee());
         return Optional.of(priceRepository.save(newPrice));
+    }
+
+    public double getPrice(String type) {
+        double price = 0.0;
+        Price ticket = priceRepository.findById(1).get();
+        if (type.equals("adult")) {
+            price = ticket.getAticket();
+        }
+        if (type.equals("child")) {
+            price = ticket.getCticket();
+        }
+        if (type.equals("elderly")) {
+            price = ticket.getSticket();
+        }
+        return price;
     }
 
 }

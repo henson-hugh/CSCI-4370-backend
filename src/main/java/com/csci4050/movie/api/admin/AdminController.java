@@ -334,8 +334,15 @@ public class AdminController {
     @CrossOrigin(origins = "http://localhost:4200")
     public ResponseEntity<PriceDto> editTicket(@RequestBody PriceDto priceDto) {
         Price price = modelMapper.map(priceDto, Price.class);
+        System.out.println(priceDto);
         priceService.editPrice(price);
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(priceDto);
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(priceDto);
+    }
+
+    @PostMapping(value = "/price/get")
+    @CrossOrigin(origins = "http://localhost:4200")
+    public ResponseEntity<Double> editTicket(@RequestBody String type) {
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(priceService.getPrice(type));
     }
 
 
