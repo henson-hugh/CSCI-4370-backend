@@ -47,10 +47,6 @@ public class BookingController {
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(ticketDto);
 
     }
-/*
-    public ResponseEntity<UserDto> updatePassword(@RequestBody UserDto userDto) {
-        User user = modelMapper.map(userDto, User.class);
-        userService.updatePassword(user);
-    }
-*/
+
+
 }

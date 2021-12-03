@@ -1,5 +1,6 @@
 package com.csci4050.movie.api.customer;
 
+import com.csci4050.movie.api.booking.BookingRepository;
 import com.csci4050.movie.api.model.Booking;
 import com.csci4050.movie.api.model.Customer;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,9 @@ public class CustomerService {
 
     @Autowired
     private JavaMailSender mailSender;
+
+    @Autowired
+    private BookingRepository bookingRepository;
 
     public Optional<Customer> getCustomerById(int id) {
         return customerRepository.findById(id);
@@ -123,4 +127,12 @@ public class CustomerService {
     }
 
 
+    public Optional<Booking> saveBooking(Booking booking) {
+        Booking updatedBooking = booking;
+        updatedBooking.setBid(booking.getBid());
+        updatedBooking.setCreditid(booking.getCreditid());
+        updatedBooking.setPromotionid(booking.getPromotionid());
+        return Optional.of(bookingRepository.save(updatedBooking));
+
+    }
 }
