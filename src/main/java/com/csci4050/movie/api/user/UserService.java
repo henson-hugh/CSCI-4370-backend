@@ -47,6 +47,8 @@ public class UserService {
 
     public Optional<User> editUser(int uid, User user) {
         User updatedUser = user;
+        updatedUser.setUid(uid);
+        updatedUser.setPassword(userRepository.findById(uid).get().getPassword());
         updatedUser.setEmail(user.getEmail());
         return Optional.of(userRepository.save(updatedUser));
 

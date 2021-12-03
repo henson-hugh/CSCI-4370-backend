@@ -223,8 +223,11 @@ public class AdminController {
 
         // check if it exists
         Optional<User> userExist = userService.getUserById(user.getUid());
-        userService.editUser(user.getUid(), user);
-        return ResponseEntity.status(HttpStatus.ACCEPTED).body(modelMapper.map(userExist.get(), UserDto.class));
+        if (userExist.isPresent()) {
+            userService.editUser(user.getUid(), user);
+            return ResponseEntity.status(HttpStatus.ACCEPTED).body(modelMapper.map(userExist.get(), UserDto.class));
+        }
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(userDto);
     }
 
 
@@ -236,8 +239,11 @@ public class AdminController {
 
         // check if it exists
         Optional<Customer> customerExist = customerService.getCustomerById(customer.getCid());
-        customerService.editCustomer(customer.getCid(), customer);
-        return ResponseEntity.status(HttpStatus.ACCEPTED).body(modelMapper.map(customerExist.get(), CustomerDto.class));
+        if (customerExist.isPresent()) {
+            customerService.editCustomer(customer.getCid(), customer);
+            return ResponseEntity.status(HttpStatus.ACCEPTED).body(modelMapper.map(customerExist.get(), CustomerDto.class));
+        }
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(customerDto);
     }
 
     @PostMapping(value = "/customer/get/{id}")
@@ -308,10 +314,20 @@ public class AdminController {
     @CrossOrigin(origins = "http://localhost:4200")
     public ResponseEntity<AdminDto> addAdmin(@RequestBody UserDto userDto) {
         User user = modelMapper.map(userDto, User.class);
-        Admin admin = new Admin();
-        admin.setUserid(user.getUid());
-        adminRepository.save(admin);
-        return ResponseEntity.status(HttpStatus.ACCEPTED).body(modelMapper.map(admin, AdminDto.class));
+        Optional<User> userCheck = userService.getUserByEmail(user.getEmail());
+        // checks
+        if (userCheck.isPresent()) { // check if user exists
+            System.out.println("****************User with: " + user.getEmail() + " already exists.**************");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(null);
+        } else {
+            userService.saveUser(user);
+            Admin admin = new Admin();
+            admin.setUserid(user.getUid());
+            adminRepository.save(admin);
+            return ResponseEntity.status(HttpStatus.ACCEPTED)
+                    .body(modelMapper.map(admin, AdminDto.class));
+        }
     }
 
     @PostMapping(value = "/price/edit")
