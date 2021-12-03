@@ -2,6 +2,8 @@ package com.csci4050.movie.api.promotion;
 
 import lombok.Data;
 
+import java.time.LocalDate;
+
 @Data
 public class PromotionDto {
 
@@ -10,4 +12,10 @@ public class PromotionDto {
     private double discount;
 
     private String pcode;
+
+    private LocalDate startDate;
+
+    private LocalDate endDate;
+
+    private String description;
 }

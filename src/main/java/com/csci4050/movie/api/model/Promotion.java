@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 
 @Entity
 @Data
@@ -22,4 +23,13 @@ public class Promotion {
 
     @Column(name = "pcode", unique = true)
     private String pcode;
+
+    @Column(name = "startDate")
+    private LocalDate startDate;
+
+    @Column(name = "endDate")
+    private LocalDate endDate;
+
+    @Column(name = "description")
+    private String description;
 }

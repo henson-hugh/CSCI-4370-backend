@@ -13,4 +13,5 @@ public interface CastRepository extends CrudRepository<Cast, Integer> {
     Optional<Cast> findByName(String name);
     Optional<Cast> findByNameAndMovieid(String name, int movieid);
     List<Cast> findAllByName(String name);
+    List<Cast> findAllByMovieid(int movieid);
 }
